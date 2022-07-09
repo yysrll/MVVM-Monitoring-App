@@ -6,9 +6,10 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.Window
+import com.google.android.material.chip.Chip
 import com.yusril.mvvmmonitoring.R
 import com.yusril.mvvmmonitoring.databinding.ActivityMainBinding
 import com.yusril.mvvmmonitoring.ui.login.LoginActivity
@@ -29,6 +30,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.tvGreeting.text = getString(R.string.greeting_messages, "Pak", "John")
+
+        val angkatan = arrayListOf("Semua", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
+        angkatan.forEach {
+            addChip(it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -41,6 +47,22 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_logout -> LoginActivity.start(this)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun addChip(name: String) {
+        val chip = Chip(this)
+        chip.apply {
+            text = name
+            isCheckable = true
+            isClickable = true
+            isCheckedIconVisible = true
+            setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    Log.d("CHIP", name)
+                }
+            }
+        }
+        binding.chipGroup.addView(chip)
     }
 
     companion object {

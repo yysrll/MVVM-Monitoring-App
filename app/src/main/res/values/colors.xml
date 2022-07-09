@@ -37,4 +37,8 @@
     <color name="danger_300">#FF9983</color>
     <color name="danger_500">#FF3232</color>
     <color name="danger_700">#B71934</color>
+
+    <color name="grey_100">#F8F8F8</color>
+    <color name="grey_200">#F2F2F2</color>
+    <color name="grey_300">#D8D8D8</color>
 </resources>

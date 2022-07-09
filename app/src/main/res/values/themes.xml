@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.MVVMMonitoring" parent="Theme.Material3.DayNight">
         <!-- Primary brand color. -->
@@ -12,5 +12,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="CustomChipStyle" parent="Widget.Material3.Chip.Filter">
+<!--        <item name="chipBackgroundColor">@color/chip_background_color</item>-->
+<!--        <item name="checkedIconTint">@color/success_200</item>-->
+<!--        <item name="android:textColor">@color/success_700</item>-->
     </style>
 </resources>
