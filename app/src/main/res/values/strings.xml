@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MVVM Monitoring</string>
+    <string name="login">Login</string>
+    <string name="nip">NIP</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Lupa Password?</string>
 </resources>
