@@ -1,5 +1,7 @@
 package com.yusril.mvvmmonitoring.ui.login
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.yusril.mvvmmonitoring.databinding.ActivityLoginBinding
@@ -17,6 +19,12 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
         binding.btnLogin.setOnClickListener {
             MainActivity.start(this)
+        }
+    }
+
+    companion object {
+        fun start(activity: Activity) {
+            activity.startActivity(Intent(activity, LoginActivity::class.java))
         }
     }
 }
