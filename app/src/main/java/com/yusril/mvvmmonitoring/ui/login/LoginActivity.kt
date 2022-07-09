@@ -3,6 +3,7 @@ package com.yusril.mvvmmonitoring.ui.login
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.yusril.mvvmmonitoring.databinding.ActivityLoginBinding
+import com.yusril.mvvmmonitoring.ui.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -14,5 +15,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
+        binding.btnLogin.setOnClickListener {
+            MainActivity.start(this)
+        }
     }
 }
