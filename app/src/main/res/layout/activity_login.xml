@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/btn_forgot_password"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="@string/forgot_password"
+        android:text="@string/login"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
