@@ -11,7 +11,9 @@ import com.yusril.mvvmmonitoring.R
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.presentation.SectionsPagerAdapter
 import com.yusril.mvvmmonitoring.databinding.ActivityDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
@@ -35,6 +37,7 @@ class DetailActivity : AppCompatActivity() {
         binding.detailStudentGpa.text = student.gpa
 
         setupPagerAdapter()
+
     }
 
     private fun setupPagerAdapter() {
@@ -51,11 +54,12 @@ class DetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_STUDENT = "extra_student"
-        private val TAB_TITLES = arrayOf(
+        val TAG = DetailActivity::class.simpleName
+        val TAB_TITLES = arrayOf(
             "KHS",
             "TRANSKRIP"
         )
+        const val EXTRA_STUDENT = "extra_student"
         fun start(activity: Activity, student: Student) {
             val intent = Intent(activity, DetailActivity::class.java)
             intent.putExtra(EXTRA_STUDENT, student)

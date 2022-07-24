@@ -2,6 +2,7 @@ package com.yusril.mvvmmonitoring.core.data
 
 import com.yusril.mvvmmonitoring.core.data.remote.MonitoringApi
 import com.yusril.mvvmmonitoring.core.domain.model.Student
+import com.yusril.mvvmmonitoring.core.domain.model.StudyResult
 import com.yusril.mvvmmonitoring.core.domain.repository.MainRepository
 import com.yusril.mvvmmonitoring.core.vo.Resource
 import com.yusril.mvvmmonitoring.utils.DataMapper
@@ -27,6 +28,25 @@ class RepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             result.value = Resource.error(e.message ?: "Something went wrong")
         }
+        return result
+    }
+
+    override suspend fun getStudyResult(nim: String, semester_code: String?): StateFlow<Resource<List<StudyResult>>> {
+        val result = MutableStateFlow<Resource<List<StudyResult>>>(Resource.empty())
+        result.value = Resource.loading()
+        try {
+            val response = api.getStudyResult(nim, semester_code)
+            val responseBody = response.body()
+            if (response.isSuccessful && responseBody != null) {
+                val listStudyResult = DataMapper.mapStudyResultResponseToStudyResult(responseBody.kartu_hasil_studi)
+                result.value = Resource.success(listStudyResult)
+            } else {
+                result.value = Resource.error(response.message())
+            }
+        } catch (e: Exception) {
+            result.value = Resource.error(e.message ?: "Something went wrong")
+        }
+
         return result
     }
 }

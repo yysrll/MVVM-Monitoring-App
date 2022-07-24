@@ -41,4 +41,10 @@
     <color name="grey_100">#F8F8F8</color>
     <color name="grey_200">#F2F2F2</color>
     <color name="grey_300">#D8D8D8</color>
+
+    <color name="color_grade_a">#5DC86E</color>
+    <color name="color_grade_b">#A6C85D</color>
+    <color name="color_grade_c">#ECEE7A</color>
+    <color name="color_grade_d">#EEC07A</color>
+    <color name="color_grade_e">#F15858</color>
 </resources>

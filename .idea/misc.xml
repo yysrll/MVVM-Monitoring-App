@@ -3,11 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/bg_grade_A.xml" value="0.2735" />
+        <entry key="app/src/main/res/drawable/bg_grade_a.xml" value="0.2735" />
+        <entry key="app/src/main/res/drawable/bg_grade_b.xml" value="0.2735" />
+        <entry key="app/src/main/res/drawable/bg_grade_c.xml" value="0.2735" />
+        <entry key="app/src/main/res/drawable/bg_grade_d.xml" value="0.2735" />
+        <entry key="app/src/main/res/drawable/bg_grade_e.xml" value="0.2735" />
+        <entry key="app/src/main/res/drawable/bg_rounded.xml" value="0.2735" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.29435897435897435" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_grade.xml" value="0.2989583333333333" />
+        <entry key="app/src/main/res/layout/fragment_grade.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/item_row_grade.xml" value="0.29907407407407405" />
         <entry key="app/src/main/res/layout/item_row_student.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/item_row_subject.xml" value="0.29907407407407405" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.38697916666666665" />
       </map>
     </option>

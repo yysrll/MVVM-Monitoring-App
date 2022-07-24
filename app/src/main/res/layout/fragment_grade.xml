@@ -1,14 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.detail.GradeFragment">
 
     <TextView
-        android:id="@+id/tv_grade_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/tv_total_sks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Jumlah SKS yang diambil"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_total_sks_value"
+        />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tv_total_sks_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/tv_total_sks"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tv_total_subject"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Mata Kuliah yang diambil"
+        app:layout_constraintTop_toBottomOf="@id/tv_total_sks"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_total_subject_value"
+        />
+
+    <TextView
+        android:id="@+id/tv_total_subject_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/tv_total_subject"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tv_total_gpa"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="IP Semester"
+        app:layout_constraintTop_toBottomOf="@id/tv_total_subject"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_total_gpa_value"
+        />
+
+    <TextView
+        android:id="@+id/tv_total_gpa_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.00"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/tv_total_gpa"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_subjects"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_total_gpa"
+        tools:listitem="@layout/item_row_subject" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
