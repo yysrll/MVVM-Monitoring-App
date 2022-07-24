@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.yusril.mvvmmonitoring.R
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.databinding.ItemRowStudentBinding
 
@@ -19,6 +21,7 @@ class StudentAdapter : RecyclerView.Adapter<StudentAdapter.RecyclerViewHolder>()
     class RecyclerViewHolder(private val binding: ItemRowStudentBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(student: Student) {
             with(binding) {
+                rvRowPhoto.setImageResource(R.drawable.ic_generic_avatar)
                 rvRowName.text = student.nim
                 rvRowNim.text = student.gpa
                 rvRowSks.text = "${student.sks} SKS"

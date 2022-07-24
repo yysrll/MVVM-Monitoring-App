@@ -42,10 +42,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.tvGreeting.text = getString(R.string.greeting_messages, "Pak", "John")
 
-        val angkatan = arrayListOf("Semua", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
-        angkatan.forEach {
-            addChip(it)
-        }
+//        val angkatan = arrayListOf("Semua", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
+//        angkatan.forEach {
+//            addChip(it)
+//        }
 
         viewModel.getStudent("1234567890")
 
