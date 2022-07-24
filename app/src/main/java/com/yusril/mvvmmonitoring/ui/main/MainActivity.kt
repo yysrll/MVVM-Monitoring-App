@@ -14,9 +14,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.yusril.mvvmmonitoring.R
+import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.presentation.StudentAdapter
 import com.yusril.mvvmmonitoring.core.vo.Status
 import com.yusril.mvvmmonitoring.databinding.ActivityMainBinding
+import com.yusril.mvvmmonitoring.ui.detail.DetailActivity
 import com.yusril.mvvmmonitoring.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -81,6 +83,11 @@ class MainActivity : AppCompatActivity() {
             adapter = studentAdapter
             setHasFixedSize(true)
         }
+        studentAdapter.setOnItemClickCallback(object : StudentAdapter.OnItemClickCallback {
+            override fun onItemClicked(student: Student) {
+                DetailActivity.start(this@MainActivity, student)
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
