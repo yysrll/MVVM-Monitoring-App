@@ -2,6 +2,7 @@ package com.yusril.mvvmmonitoring.core.data
 
 import com.yusril.mvvmmonitoring.core.data.remote.MonitoringApi
 import com.yusril.mvvmmonitoring.core.domain.model.Student
+import com.yusril.mvvmmonitoring.core.domain.model.StudentProfile
 import com.yusril.mvvmmonitoring.core.domain.model.StudyResult
 import com.yusril.mvvmmonitoring.core.domain.repository.MainRepository
 import com.yusril.mvvmmonitoring.core.vo.Resource
@@ -40,6 +41,25 @@ class RepositoryImpl @Inject constructor(
             if (response.isSuccessful && responseBody != null) {
                 val listStudyResult = DataMapper.mapStudyResultResponseToStudyResult(responseBody.kartu_hasil_studi)
                 result.value = Resource.success(listStudyResult)
+            } else {
+                result.value = Resource.error(response.message())
+            }
+        } catch (e: Exception) {
+            result.value = Resource.error(e.message ?: "Something went wrong")
+        }
+
+        return result
+    }
+
+    override suspend fun getStudentProfile(nim: String): StateFlow<Resource<StudentProfile>> {
+        val result = MutableStateFlow<Resource<StudentProfile>>(Resource.empty())
+        result.value = Resource.loading()
+        try {
+            val response = api.getStudentDetail(nim)
+            val responseBody = response.body()
+            if (response.isSuccessful && responseBody != null) {
+                val studentProfile = DataMapper.mapStudentProfileResponseToStudentProfile(responseBody.mahasiswa)
+                result.value = Resource.success(studentProfile)
             } else {
                 result.value = Resource.error(response.message())
             }

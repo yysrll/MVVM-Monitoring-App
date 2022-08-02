@@ -1,9 +1,11 @@
 package com.yusril.mvvmmonitoring.utils
 
 import com.yusril.mvvmmonitoring.core.data.remote.models.ListStudyResultResponse
+import com.yusril.mvvmmonitoring.core.data.remote.models.StudentProfileResponse
 import com.yusril.mvvmmonitoring.core.data.remote.models.StudentResponse
 import com.yusril.mvvmmonitoring.core.data.remote.models.StudyResultResponse
 import com.yusril.mvvmmonitoring.core.domain.model.Student
+import com.yusril.mvvmmonitoring.core.domain.model.StudentProfile
 import com.yusril.mvvmmonitoring.core.domain.model.StudyResult
 
 object DataMapper {
@@ -35,5 +37,12 @@ object DataMapper {
             listStudyResult.add(studyResult)
         }
         return listStudyResult
+    }
+
+    fun mapStudentProfileResponseToStudentProfile(mahasiswa: StudentProfileResponse): StudentProfile {
+        return StudentProfile(
+            nim = mahasiswa.nim,
+            name = mahasiswa.nama,
+        )
     }
 }

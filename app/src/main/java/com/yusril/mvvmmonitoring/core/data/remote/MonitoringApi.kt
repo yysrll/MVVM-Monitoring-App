@@ -1,5 +1,6 @@
 package com.yusril.mvvmmonitoring.core.data.remote
 
+import com.yusril.mvvmmonitoring.core.data.remote.models.GetStudentProfileResponse
 import com.yusril.mvvmmonitoring.core.data.remote.models.ListStudentResponse
 import com.yusril.mvvmmonitoring.core.data.remote.models.ListStudyResultResponse
 import retrofit2.Response
@@ -18,4 +19,9 @@ interface MonitoringApi {
         @Query("nim") nim: String,
         @Query("kode_semester") semester_code: String? = null
     ): Response<ListStudyResultResponse>
+
+    @GET("service/mahasiswa")
+    suspend fun getStudentDetail(
+        @Query("nim") nim: String
+    ): Response<GetStudentProfileResponse>
 }

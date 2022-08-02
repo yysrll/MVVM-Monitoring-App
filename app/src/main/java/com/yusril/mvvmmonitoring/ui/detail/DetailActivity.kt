@@ -6,18 +6,24 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yusril.mvvmmonitoring.R
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.presentation.SectionsPagerAdapter
+import com.yusril.mvvmmonitoring.core.vo.Status
 import com.yusril.mvvmmonitoring.databinding.ActivityDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
     private lateinit var student: Student
+    private val viewModel: DetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +43,27 @@ class DetailActivity : AppCompatActivity() {
         binding.detailStudentGpa.text = student.gpa
 
         setupPagerAdapter()
+
+        viewModel.getStudentProfile(student.nim)
+        lifecycleScope.launchWhenCreated {
+            viewModel.studentProfile.collect {
+                when (it.status) {
+                    Status.LOADING -> {
+                        Log.d(TAG, "Loading")
+                    }
+                    Status.SUCCESS -> {
+                        Log.d(TAG, "Success: ${it.data?.name}")
+                        binding.detailStudentName.text = it.data?.name
+                    }
+                    Status.EMPTY -> {
+                        Log.d(TAG, "Empty")
+                    }
+                    Status.ERROR -> {
+                        Log.d(TAG, "Error: ${it.message}")
+                    }
+                }
+            }
+        }
 
     }
 
