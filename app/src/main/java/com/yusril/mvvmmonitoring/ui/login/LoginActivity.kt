@@ -5,8 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
+import com.yusril.mvvmmonitoring.R
 import com.yusril.mvvmmonitoring.core.vo.Status
 import com.yusril.mvvmmonitoring.databinding.ActivityLoginBinding
 import com.yusril.mvvmmonitoring.ui.main.MainActivity
@@ -36,6 +40,8 @@ class LoginActivity : AppCompatActivity() {
                 when (it.status) {
                     Status.LOADING -> {
                         Log.d(TAG, "Loading")
+                        binding.btnLogin.visibility = View.INVISIBLE
+                        binding.pbLogin.visibility = View.VISIBLE
                     }
                     Status.SUCCESS -> {
                         MainActivity.start(this@LoginActivity)
@@ -44,9 +50,17 @@ class LoginActivity : AppCompatActivity() {
                     }
                     Status.EMPTY -> {
                         Log.d(TAG, "Empty")
+                        binding.btnLogin.visibility = View.VISIBLE
+                        binding.pbLogin.visibility = View.INVISIBLE
                     }
                     Status.ERROR -> {
                         Log.d(TAG, "Error: ${it.message}")
+                        binding.btnLogin.visibility = View.VISIBLE
+                        binding.pbLogin.visibility = View.INVISIBLE
+                        Snackbar.make(binding.root, it.message ?: "", Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.danger_200))
+                            .setTextColor(ContextCompat.getColor(applicationContext, R.color.danger_7 00))
+                            .show()
                     }
                 }
             }
