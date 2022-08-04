@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
                         binding.pbLogin.visibility = View.INVISIBLE
                         Snackbar.make(binding.root, it.message ?: "", Snackbar.LENGTH_LONG)
                             .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.danger_200))
-                            .setTextColor(ContextCompat.getColor(applicationContext, R.color.danger_7 00))
+                            .setTextColor(ContextCompat.getColor(applicationContext, R.color.danger_700))
                             .show()
                     }
                 }
