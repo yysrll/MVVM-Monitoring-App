@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/poppins</item>
     </style>
 
     <style name="CustomChipStyle" parent="Widget.Material3.Chip.Filter">
