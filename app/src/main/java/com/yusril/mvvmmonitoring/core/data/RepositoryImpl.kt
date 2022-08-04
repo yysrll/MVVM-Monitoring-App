@@ -69,4 +69,22 @@ class RepositoryImpl @Inject constructor(
 
         return result
     }
+
+    override suspend fun login(nidn: String, password: String): StateFlow<Resource<String>> {
+        val result = MutableStateFlow<Resource<String>>(Resource.empty())
+        result.value = Resource.loading()
+        try {
+            val response = api.login(nidn, password)
+            val responseBody = response.body()
+            if (response.isSuccessful && responseBody != null) {
+                result.value = Resource.success(responseBody.token)
+            } else {
+                result.value = Resource.error(response.message())
+            }
+        } catch (e: Exception) {
+            result.value = Resource.error(e.message ?: "Something went wrong")
+        }
+
+        return result
+    }
 }

@@ -10,4 +10,5 @@ interface MainRepository {
     suspend fun getListStudent(nidn: String): StateFlow<Resource<List<Student>>>
     suspend fun getStudyResult(nim: String, semester_code: String?): StateFlow<Resource<List<StudyResult>>>
     suspend fun getStudentProfile(nim: String): StateFlow<Resource<StudentProfile>>
+    suspend fun login(nidn: String, password: String): StateFlow<Resource<String>>
 }
