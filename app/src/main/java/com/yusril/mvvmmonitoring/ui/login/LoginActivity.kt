@@ -19,6 +19,7 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
         binding.btnLogin.setOnClickListener {
             MainActivity.start(this)
+            finish()
         }
     }
 

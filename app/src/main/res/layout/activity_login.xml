@@ -7,25 +7,26 @@
     android:padding="24dp"
     tools:context=".ui.login.LoginActivity">
 
-    <ImageView
-        android:id="@+id/login_illustration"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@drawable/ic_login"
-        app:layout_constraintBaseline_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
-
     <TextView
         android:id="@+id/tv_login"
         style="@style/TextAppearance.Material3.DisplaySmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/login_illustration"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:text="@string/login"
         />
+
+    <ImageView
+        android:id="@+id/login_illustration"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_login"
+        android:layout_marginVertical="24dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:contentDescription="illustration" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/il_login"
@@ -33,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/nip"
-        app:layout_constraintTop_toBottomOf="@id/tv_login"
+        app:layout_constraintTop_toBottomOf="@id/login_illustration"
         app:layout_constraintLeft_toLeftOf="parent"
         >
 
@@ -80,8 +81,9 @@
 
     <Button
         android:id="@+id/btn_login"
+        style="@style/Widget.AppCompat.Button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         app:layout_constraintTop_toBottomOf="@id/btn_forgot_password"
         app:layout_constraintRight_toRightOf="parent"
         android:text="@string/login"
