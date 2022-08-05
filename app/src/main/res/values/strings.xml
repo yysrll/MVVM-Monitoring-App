@@ -6,11 +6,12 @@
     <string name="forgot_password">Lupa Password?</string>
     <string name="logout">Keluar</string>
 
-    <string name="welcome_messages">Selamat Datang</string>
-    <string name="greeting_messages">Halo, %1$s %2$s</string>
+    <string name="welcome_messages">Halo, Selamat Datang</string>
+    <string name="lecturer_name">%1$s %2$s</string>
 
     <string name="total_student">%1$d mahasiswa</string>
 
     <string name="detail_title">Profil Mahasiswa</string>
+    <string name="student_label">Mahasiswa Bimbingan</string>
 
 </resources>

@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -18,6 +19,7 @@ import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.presentation.StudentAdapter
 import com.yusril.mvvmmonitoring.core.vo.Status
 import com.yusril.mvvmmonitoring.databinding.ActivityMainBinding
+import com.yusril.mvvmmonitoring.databinding.StudentListBinding
 import com.yusril.mvvmmonitoring.ui.detail.DetailActivity
 import com.yusril.mvvmmonitoring.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,23 +28,25 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var includeBinding: StudentListBinding
     private lateinit var studentAdapter: StudentAdapter
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        includeBinding = StudentListBinding.bind(binding.root)
         setContentView(binding.root)
 
         supportActionBar?.apply {
             title = ""
             elevation = 0f
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this@MainActivity, R.color.primary_500)))
         }
 
         initRecyclerView()
 
-        binding.tvGreeting.text = getString(R.string.greeting_messages, "Pak", "John")
+        binding.tvLecturerName.text = getString(R.string.lecturer_name, "Pak", "John Doe")
 
 //        val angkatan = arrayListOf("Semua", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
 //        angkatan.forEach {
@@ -77,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         studentAdapter = StudentAdapter()
-        val rv = binding.rvStudents
+        val rv = includeBinding.rvStudents
         rv.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = studentAdapter
@@ -115,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        binding.chipGroup.addView(chip)
+//        binding.chipGroup.addView(chip)
     }
 
     companion object {
