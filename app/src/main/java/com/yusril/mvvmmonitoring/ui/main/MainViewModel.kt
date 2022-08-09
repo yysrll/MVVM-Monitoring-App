@@ -26,4 +26,8 @@ class MainViewModel @Inject constructor (
             _students.value = repository.getListStudent(nidn).value
         }
     }
+
+    fun deleteLecturerLogin() = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteLecturer()
+    }
 }

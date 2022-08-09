@@ -2,10 +2,12 @@ package com.yusril.mvvmmonitoring.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yusril.mvvmmonitoring.core.domain.model.Lecturer
 import com.yusril.mvvmmonitoring.core.domain.repository.MainRepository
 import com.yusril.mvvmmonitoring.core.vo.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -23,6 +25,12 @@ class LoginViewModel @Inject constructor(
         _loginState.value = Resource.loading()
         viewModelScope.launch(Dispatchers.IO) {
             _loginState.value = repository.login(nidn, password).value
+        }
+    }
+
+    fun setNewLecturerLogin(lecturer: Lecturer) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.setNewLecturer(lecturer)
         }
     }
 }

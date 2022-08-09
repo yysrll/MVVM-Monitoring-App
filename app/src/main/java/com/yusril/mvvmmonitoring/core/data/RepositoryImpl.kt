@@ -1,18 +1,22 @@
 package com.yusril.mvvmmonitoring.core.data
 
+import com.yusril.mvvmmonitoring.core.data.local.PreferenceDataSource
 import com.yusril.mvvmmonitoring.core.data.remote.MonitoringApi
+import com.yusril.mvvmmonitoring.core.domain.model.Lecturer
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.domain.model.StudentProfile
 import com.yusril.mvvmmonitoring.core.domain.model.StudyResult
 import com.yusril.mvvmmonitoring.core.domain.repository.MainRepository
 import com.yusril.mvvmmonitoring.core.vo.Resource
 import com.yusril.mvvmmonitoring.utils.DataMapper
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
-    private val api: MonitoringApi
+    private val api: MonitoringApi,
+    private val local: PreferenceDataSource
 ) : MainRepository {
     override suspend fun getListStudent(nidn: String): StateFlow<Resource<List<Student>>> {
         val result = MutableStateFlow<Resource<List<Student>>>(Resource.empty())
@@ -91,4 +95,10 @@ class RepositoryImpl @Inject constructor(
 
         return result
     }
+
+    override fun getCurrentLecturer(): Flow<Lecturer> = local.getCurrentUser()
+
+    override suspend fun setNewLecturer(lecturer: Lecturer) = local.setNewLecturer(lecturer)
+
+    override suspend fun deleteLecturer() = local.deleteLecturer()
 }

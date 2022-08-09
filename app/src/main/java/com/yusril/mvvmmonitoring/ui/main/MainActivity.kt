@@ -2,7 +2,6 @@ package com.yusril.mvvmmonitoring.ui.main
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,7 +13,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yusril.mvvmmonitoring.R
+import com.yusril.mvvmmonitoring.core.domain.model.Lecturer
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.presentation.StudentAdapter
 import com.yusril.mvvmmonitoring.core.vo.Status
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var includeBinding: StudentListBinding
     private lateinit var studentAdapter: StudentAdapter
+    private lateinit var lecturer: Lecturer
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,16 +46,17 @@ class MainActivity : AppCompatActivity() {
             setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this@MainActivity, R.color.primary_500)))
         }
 
+        lecturer = intent.getParcelableExtra<Lecturer>(LECTURER) as Lecturer
         initRecyclerView()
 
-        binding.tvLecturerName.text = getString(R.string.lecturer_name, "Pak", "John Doe")
+        binding.tvLecturerName.text = getString(R.string.lecturer_name, lecturer.name)
 
 //        val angkatan = arrayListOf("Semua", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
 //        angkatan.forEach {
 //            addChip(it)
 //        }
 
-        viewModel.getStudent("1234567890")
+        viewModel.getStudent(lecturer.nidn)
 
 
         lifecycleScope.launchWhenCreated {
@@ -101,9 +104,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_logout -> LoginActivity.start(this)
+            R.id.menu_logout -> showLogoutDialog()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showLogoutDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(resources.getString(R.string.logout_confirm))
+            .setPositiveButton(resources.getString(R.string.confirm_accept)) { _,_ ->
+                viewModel.deleteLecturerLogin()
+                LoginActivity.start(this)
+                finish()
+            }
+            .setNegativeButton(resources.getString(R.string.confirm_decline)) {_,_ ->
+
+            }
+            .show()
     }
 
     private fun addChip(name: String) {
@@ -124,8 +141,11 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val TAG = MainActivity::class.simpleName
-        fun start(activity: Activity) {
-            activity.startActivity(Intent(activity, MainActivity::class.java))
+        const val LECTURER = "lecturer"
+        fun start(activity: Activity, lecturer: Lecturer) {
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.putExtra(LECTURER, lecturer)
+            activity.startActivity(intent)
         }
     }
 }

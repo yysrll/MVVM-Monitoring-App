@@ -8,9 +8,12 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.yusril.mvvmmonitoring.R
+import com.yusril.mvvmmonitoring.core.domain.model.Lecturer
 import com.yusril.mvvmmonitoring.core.vo.Status
 import com.yusril.mvvmmonitoring.databinding.ActivityLoginBinding
 import com.yusril.mvvmmonitoring.ui.main.MainActivity
@@ -20,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var lecturer: Lecturer
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,23 +44,27 @@ class LoginActivity : AppCompatActivity() {
                 when (it.status) {
                     Status.LOADING -> {
                         Log.d(TAG, "Loading")
-                        binding.btnLogin.visibility = View.INVISIBLE
-                        binding.pbLogin.visibility = View.VISIBLE
+                        isLoading(true)
                     }
                     Status.SUCCESS -> {
-                        MainActivity.start(this@LoginActivity)
+                        lecturer = Lecturer(
+                            name = "Philip Lackner",
+                            nidn = binding.etNip.text.toString(),
+                            token = it.data.toString()
+                        )
+                        viewModel.setNewLecturerLogin(lecturer)
+                        MainActivity.start(this@LoginActivity, lecturer)
                         finish()
+                        isLoading(false)
                         Log.d(TAG, "Success: token ${it.data}")
                     }
                     Status.EMPTY -> {
                         Log.d(TAG, "Empty")
-                        binding.btnLogin.visibility = View.VISIBLE
-                        binding.pbLogin.visibility = View.INVISIBLE
+                        isLoading(false)
                     }
                     Status.ERROR -> {
                         Log.d(TAG, "Error: ${it.message}")
-                        binding.btnLogin.visibility = View.VISIBLE
-                        binding.pbLogin.visibility = View.INVISIBLE
+                        isLoading(false)
                         Snackbar.make(binding.root, it.message ?: "", Snackbar.LENGTH_LONG)
                             .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.danger_200))
                             .setTextColor(ContextCompat.getColor(applicationContext, R.color.danger_700))
@@ -65,6 +73,11 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun isLoading(state: Boolean) {
+        binding.btnLogin.isInvisible = state
+        binding.pbLogin.isInvisible = !state
     }
 
     companion object {

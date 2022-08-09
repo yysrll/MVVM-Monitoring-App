@@ -7,11 +7,14 @@
     <string name="logout">Keluar</string>
 
     <string name="welcome_messages">Halo, Selamat Datang</string>
-    <string name="lecturer_name">%1$s %2$s</string>
+    <string name="lecturer_name">%1$s</string>
 
     <string name="total_student">%1$d mahasiswa</string>
 
     <string name="detail_title">Profil Mahasiswa</string>
     <string name="student_label">Mahasiswa Bimbingan</string>
+    <string name="logout_confirm">Anda yakin akan keluar?</string>
+    <string name="confirm_accept">Yakin</string>
+    <string name="confirm_decline">Tidak</string>
 
 </resources>
