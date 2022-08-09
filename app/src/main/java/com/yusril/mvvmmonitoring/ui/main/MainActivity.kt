@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -24,6 +25,7 @@ import com.yusril.mvvmmonitoring.databinding.StudentListBinding
 import com.yusril.mvvmmonitoring.ui.detail.DetailActivity
 import com.yusril.mvvmmonitoring.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -64,22 +66,31 @@ class MainActivity : AppCompatActivity() {
                 when (it.status) {
                     Status.LOADING -> {
                         Log.d(TAG, "Loading")
+                        showLoading(true)
                     }
                     Status.SUCCESS -> {
+                        showLoading(false)
                         it.data?.let { data ->
                             studentAdapter.addStudents(data)
                         }
                         Log.d(TAG, "Success: ${it.data}")
                     }
                     Status.EMPTY -> {
+                        showLoading(false)
                         Log.d(TAG, "Empty")
                     }
                     Status.ERROR -> {
+                        showLoading(false)
                         Log.d(TAG, "Error: ${it.message}")
                     }
                 }
             }
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        includeBinding.rvStudents.isInvisible = isLoading
+        includeBinding.progressBar.isInvisible = !isLoading
     }
 
     private fun initRecyclerView() {

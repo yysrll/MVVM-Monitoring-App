@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +38,7 @@ class GradeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val index = arguments!!.getInt(ARG_SECTION_NUMBER, 0)
+        val index = requireArguments().getInt(ARG_SECTION_NUMBER, 0)
         student = activity?.intent?.getParcelableExtra(EXTRA_STUDENT)!!
 
         initRecyclerView()
@@ -47,9 +48,11 @@ class GradeFragment : Fragment() {
             viewModel.listStudyGrade.collect {
                 when (it.status) {
                     Status.LOADING -> {
+                        showLoading(true)
                         Log.d("$TAG ${TAB_TITLES[index-1]}", "Loading")
                     }
                     Status.SUCCESS -> {
+                        showLoading(false)
                         Log.d("$TAG ${TAB_TITLES[index-1]}", "Success: ${it.data}")
                         it.data?.let { data ->
                             subjectAdapter.addStudySubject(data)
@@ -65,9 +68,11 @@ class GradeFragment : Fragment() {
                         }
                     }
                     Status.EMPTY -> {
+                        showLoading(false)
                         Log.d("$TAG ${TAB_TITLES[index-1]}", "Empty")
                     }
                     Status.ERROR -> {
+                        showLoading(false)
                         Log.d("$TAG ${TAB_TITLES[index-1]}", "Error: ${it.message}")
                     }
                 }
@@ -90,6 +95,11 @@ class GradeFragment : Fragment() {
             1 -> viewModel.getListStudyGrade(student.nim, "20212")
             2 -> viewModel.getListStudyGrade(student.nim)
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.rvSubjects.isInvisible = isLoading
+        binding.progressBar.isInvisible = !isLoading
     }
 
     companion object {
