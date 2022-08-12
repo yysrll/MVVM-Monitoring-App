@@ -38,7 +38,7 @@ class DetailActivity : AppCompatActivity() {
         }
 
         student = intent.getParcelableExtra(EXTRA_STUDENT)!!
-        binding.detailStudentImage.setImageResource(R.drawable.ic_generic_avatar)
+//        binding.detailStudentImage.setImageResource(R.drawable.ic_generic_avatar)
         binding.detailStudentNim.text = student.nim
         binding.detailStudentGpa.text = student.gpa
 
