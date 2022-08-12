@@ -30,10 +30,11 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbarTop)
         supportActionBar?.apply {
-            title = getString(R.string.detail_title)
             elevation = 0f
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            title = null
+//            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setDisplayHomeAsUpEnabled(true)
         }
 

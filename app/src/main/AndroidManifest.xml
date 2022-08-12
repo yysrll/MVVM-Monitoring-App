@@ -28,6 +28,7 @@
         </activity>
         <activity
             android:name=".ui.detail.DetailActivity"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".ui.login.LoginActivity"
