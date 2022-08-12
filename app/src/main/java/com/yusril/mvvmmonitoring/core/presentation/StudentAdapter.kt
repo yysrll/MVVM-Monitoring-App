@@ -30,7 +30,7 @@ class StudentAdapter : RecyclerView.Adapter<StudentAdapter.RecyclerViewHolder>()
 //                rvRowPhoto.setImageResource(R.drawable.ic_generic_avatar)
                 rvRowName.text = student.nim
                 rvRowNim.text = student.gpa
-                rvRowSks.text = "${student.sks} SKS"
+                rvRowSks.text = this@RecyclerViewHolder.itemView.context.getString(R.string.total_sks, student.sks)
             }
         }
     }

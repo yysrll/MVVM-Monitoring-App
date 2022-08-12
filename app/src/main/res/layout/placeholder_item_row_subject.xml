@@ -32,7 +32,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Subject name"
-                android:textSize="18sp"
                 android:textStyle="bold"
                 android:background="@color/grey_300"
                 />
@@ -49,12 +48,11 @@
 
         <TextView
             android:id="@+id/rv_subject_grade"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@color/grey_300"
             tools:text="A+"
             android:padding="8dp"
-            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:textAlignment="center"

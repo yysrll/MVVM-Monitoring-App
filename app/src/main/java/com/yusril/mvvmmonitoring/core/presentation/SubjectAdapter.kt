@@ -29,7 +29,7 @@ class SubjectAdapter: RecyclerView.Adapter<SubjectAdapter.RecyclerViewHolder>() 
                 else -> R.drawable.bg_grade_e
             }
             binding.rvSubjectName.text = item.name
-            binding.rvSubjectSks.text = item.sks.toString()
+            binding.rvSubjectSks.text = this.itemView.context.getString(R.string.total_sks, item.sks)
             binding.rvSubjectGrade.apply {
                 text = item.score_letter
                 background = context.getDrawable(bgGrade)
