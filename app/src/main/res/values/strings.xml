@@ -18,5 +18,8 @@
     <string name="logout_confirm">Anda yakin akan keluar?</string>
     <string name="confirm_accept">Yakin</string>
     <string name="confirm_decline">Tidak</string>
+    <string name="error_dialog_title">Ups, terjadi kesalahan</string>
+    <string name="error_dialog_description">Data yang anda minta sedang bermasalah, cobalah beberapa saat lagi!</string>
+    <string name="try_again">Coba lagi</string>
 
 </resources>

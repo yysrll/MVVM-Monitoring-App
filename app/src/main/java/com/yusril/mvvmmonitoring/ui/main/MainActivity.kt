@@ -9,12 +9,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.chip.Chip
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yusril.mvvmmonitoring.R
 import com.yusril.mvvmmonitoring.core.domain.model.Lecturer
 import com.yusril.mvvmmonitoring.core.domain.model.Student
@@ -24,22 +23,23 @@ import com.yusril.mvvmmonitoring.databinding.ActivityMainBinding
 import com.yusril.mvvmmonitoring.databinding.StudentListBinding
 import com.yusril.mvvmmonitoring.ui.detail.DetailActivity
 import com.yusril.mvvmmonitoring.ui.login.LoginActivity
+import com.yusril.mvvmmonitoring.ui.utils.MyAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var includeBinding: StudentListBinding
+    private lateinit var studentListBinding: StudentListBinding
     private lateinit var studentAdapter: StudentAdapter
     private lateinit var lecturer: Lecturer
+    private lateinit var errorAlertDialog: AlertDialog
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        includeBinding = StudentListBinding.bind(binding.root)
+        studentListBinding = StudentListBinding.bind(binding.root)
         setContentView(binding.root)
 
         supportActionBar?.apply {
@@ -52,11 +52,6 @@ class MainActivity : AppCompatActivity() {
         initRecyclerView()
 
         binding.tvLecturerName.text = getString(R.string.lecturer_name, lecturer.name)
-
-//        val angkatan = arrayListOf("Semua", "2015", "2016", "2017", "2018", "2019", "2020", "2021")
-//        angkatan.forEach {
-//            addChip(it)
-//        }
 
         viewModel.getStudent(lecturer.nidn)
 
@@ -81,21 +76,31 @@ class MainActivity : AppCompatActivity() {
                     }
                     Status.ERROR -> {
                         showLoading(false)
+                        errorAlertDialog.show()
                         Log.d(TAG, "Error: ${it.message}")
                     }
                 }
             }
         }
+
+        errorAlertDialog = MyAlertDialog().setErrorAlertDialog(
+            this,
+            resources.getString(R.string.error_dialog_title),
+            resources.getString(R.string.error_dialog_description),
+            resources.getString(R.string.try_again)
+        ) {
+            viewModel.getStudent(lecturer.nidn)
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        includeBinding.rvStudents.isInvisible = isLoading
-        includeBinding.progressBar.isInvisible = !isLoading
+        studentListBinding.rvStudents.isInvisible = isLoading
+        studentListBinding.progressBar.isInvisible = !isLoading
     }
 
     private fun initRecyclerView() {
         studentAdapter = StudentAdapter()
-        val rv = includeBinding.rvStudents
+        val rv = studentListBinding.rvStudents
         rv.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = studentAdapter
@@ -115,40 +120,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_logout -> showLogoutDialog()
+            R.id.menu_logout -> {
+                MyAlertDialog().setActionAlertDialog(
+                    this,
+                    resources.getString(R.string.logout_confirm),
+                    resources.getString(R.string.logout),
+                ) {
+                    viewModel.deleteLecturerLogin()
+                    LoginActivity.start(this)
+                    finish()
+                }.show()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showLogoutDialog() {
-        MaterialAlertDialogBuilder(this)
-            .setTitle(resources.getString(R.string.logout_confirm))
-            .setPositiveButton(resources.getString(R.string.confirm_accept)) { _,_ ->
-                viewModel.deleteLecturerLogin()
-                LoginActivity.start(this)
-                finish()
-            }
-            .setNegativeButton(resources.getString(R.string.confirm_decline)) {_,_ ->
-
-            }
-            .show()
-    }
-
-    private fun addChip(name: String) {
-        val chip = Chip(this)
-        chip.apply {
-            text = name
-            isCheckable = true
-            isClickable = true
-            isCheckedIconVisible = true
-            setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    Log.d("CHIP", name)
-                }
-            }
-        }
-//        binding.chipGroup.addView(chip)
-    }
 
     companion object {
         val TAG = MainActivity::class.simpleName

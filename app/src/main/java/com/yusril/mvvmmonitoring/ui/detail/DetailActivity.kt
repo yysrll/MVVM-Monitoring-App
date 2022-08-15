@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yusril.mvvmmonitoring.R
@@ -15,6 +16,7 @@ import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.presentation.SectionsPagerAdapter
 import com.yusril.mvvmmonitoring.core.vo.Status
 import com.yusril.mvvmmonitoring.databinding.ActivityDetailBinding
+import com.yusril.mvvmmonitoring.ui.utils.MyAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -23,6 +25,7 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
     private lateinit var student: Student
+    private lateinit var errorAlertDialog: AlertDialog
     private val viewModel: DetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,12 +63,26 @@ class DetailActivity : AppCompatActivity() {
                         Log.d(TAG, "Empty")
                     }
                     Status.ERROR -> {
+                        errorAlertDialog.show()
                         Log.d(TAG, "Error: ${it.message}")
+
                     }
                 }
             }
         }
 
+        setErrorAlertDialog()
+    }
+
+    private fun setErrorAlertDialog() {
+        errorAlertDialog = MyAlertDialog().setErrorAlertDialog(
+            this,
+            resources.getString(R.string.error_dialog_title),
+            resources.getString(R.string.error_dialog_description),
+            resources.getString(R.string.try_again)
+        ) {
+            viewModel.getStudentProfile(student.nim)
+        }
     }
 
     private fun setupPagerAdapter() {

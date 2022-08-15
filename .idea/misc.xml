@@ -12,6 +12,8 @@
         <entry key="app/src/main/res/drawable/bg_rounded.xml" value="0.2735" />
         <entry key="app/src/main/res/drawable/bg_splashscreen.xml" value="0.1565" />
         <entry key="app/src/main/res/drawable/bg_student_list.xml" value="0.1565" />
+        <entry key="app/src/main/res/drawable/bg_white_rounded.xml" value="0.1565" />
+        <entry key="app/src/main/res/drawable/ic_error.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_generic_avatar.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1565" />
         <entry key="app/src/main/res/drawable/ic_logout.xml" value="0.1" />
@@ -19,6 +21,7 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.26832582703491553" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.22870370370370371" />
+        <entry key="app/src/main/res/layout/error_alert_dialog.xml" value="0.22870370370370371" />
         <entry key="app/src/main/res/layout/fragment_grade.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_row_grade.xml" value="0.29907407407407405" />
         <entry key="app/src/main/res/layout/item_row_student.xml" value="0.3160493827160494" />

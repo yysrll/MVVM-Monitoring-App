@@ -6,21 +6,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.yusril.mvvmmonitoring.R
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.presentation.SubjectAdapter
 import com.yusril.mvvmmonitoring.core.vo.Status
 import com.yusril.mvvmmonitoring.databinding.FragmentGradeBinding
 import com.yusril.mvvmmonitoring.ui.detail.DetailActivity.Companion.EXTRA_STUDENT
 import com.yusril.mvvmmonitoring.ui.detail.DetailActivity.Companion.TAB_TITLES
+import com.yusril.mvvmmonitoring.ui.utils.MyAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class GradeFragment : Fragment() {
 
+    private lateinit var errorAlertDialog: AlertDialog
     private lateinit var binding: FragmentGradeBinding
     private lateinit var student: Student
     private lateinit var subjectAdapter: SubjectAdapter
@@ -45,16 +49,16 @@ class GradeFragment : Fragment() {
 
         getListStudyGrade(index, student)
         lifecycleScope.launchWhenCreated {
-            viewModel.listStudyGrade.collect {
-                when (it.status) {
+            viewModel.listStudyGrade.collect { listStudyResult ->
+                when (listStudyResult.status) {
                     Status.LOADING -> {
                         showLoading(true)
                         Log.d("$TAG ${TAB_TITLES[index-1]}", "Loading")
                     }
                     Status.SUCCESS -> {
                         showLoading(false)
-                        Log.d("$TAG ${TAB_TITLES[index-1]}", "Success: ${it.data}")
-                        it.data?.let { data ->
+                        Log.d("$TAG ${TAB_TITLES[index-1]}", "Success: ${listStudyResult.data}")
+                        listStudyResult.data?.let { data ->
                             subjectAdapter.addStudySubject(data)
                             val sks = data.sumOf { it.sks }
                             val scoreTotal = data.sumOf { it.score_total.toDouble() }
@@ -73,10 +77,24 @@ class GradeFragment : Fragment() {
                     }
                     Status.ERROR -> {
                         showLoading(false)
-                        Log.d("$TAG ${TAB_TITLES[index-1]}", "Error: ${it.message}")
+                        errorAlertDialog.show()
+                        Log.d("$TAG ${TAB_TITLES[index-1]}", "Error: ${listStudyResult.message}")
                     }
                 }
             }
+        }
+
+        setErrorAlertDialog()
+    }
+
+    private fun setErrorAlertDialog() {
+        errorAlertDialog = MyAlertDialog().setErrorAlertDialog(
+            requireActivity(),
+            resources.getString(R.string.error_dialog_title),
+            resources.getString(R.string.error_dialog_description),
+            resources.getString(R.string.try_again)
+        ) {
+            viewModel.getStudentProfile(student.nim)
         }
     }
 
@@ -103,7 +121,7 @@ class GradeFragment : Fragment() {
     }
 
     companion object {
-        val TAG = GradeFragment::class.java.simpleName
+        val TAG: String = GradeFragment::class.java.simpleName
         const val ARG_SECTION_NUMBER = "section_number"
     }
 }

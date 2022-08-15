@@ -15,6 +15,21 @@
         <item name="fontFamily">@font/poppins</item>
     </style>
 
+    <style name="Theme.MVVMMonitoring.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary_500</item>
+        <item name="colorPrimaryVariant">@color/primary_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary_200</item>
+        <item name="colorSecondaryVariant">@color/secondary_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
     <style name="CustomChipStyle" parent="Widget.Material3.Chip.Filter">
 <!--        <item name="chipBackgroundColor">@color/chip_background_color</item>-->
 <!--        <item name="checkedIconTint">@color/success_200</item>-->
