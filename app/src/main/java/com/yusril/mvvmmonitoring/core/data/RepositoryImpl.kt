@@ -23,13 +23,15 @@ class RepositoryImpl @Inject constructor(
         try {
             val response = api.getStudent(nidn)
             val responseBody = response.body()
-            if (response.isSuccessful && responseBody != null) {
-                val listStudent = DataMapper.mapStudentResponseToStudent(responseBody.mahasiswas)
-                result.value = Resource.success(listStudent)
-            } else if (responseBody == null) {
-                result.value = Resource.empty()
+            if (response.isSuccessful) {
+                if (responseBody != null) {
+                    val listStudent = DataMapper.mapStudentResponseToStudent(responseBody.mahasiswas)
+                    result.value = Resource.success(listStudent)
+                } else {
+                    result.value = Resource.empty()
+                }
             } else {
-                    result.value = Resource.error(response.message())
+                result.value = Resource.error(response.message())
             }
         } catch (e: Exception) {
             result.value = Resource.error(e.message ?: "Something went wrong")
@@ -42,11 +44,13 @@ class RepositoryImpl @Inject constructor(
         try {
             val response = api.getStudyResult(nim, semester_code)
             val responseBody = response.body()
-            if (response.isSuccessful && responseBody != null) {
-                val listStudyResult = DataMapper.mapStudyResultResponseToStudyResult(responseBody.kartu_hasil_studi)
-                result.value = Resource.success(listStudyResult)
-            } else if (responseBody == null) {
-                result.value = Resource.empty()
+            if (response.isSuccessful) {
+                if (responseBody != null) {
+                    val listStudyResult = DataMapper.mapStudyResultResponseToStudyResult(responseBody.kartu_hasil_studi)
+                    result.value = Resource.success(listStudyResult)
+                } else {
+                    result.value = Resource.empty()
+                }
             } else {
                 result.value = Resource.error(response.message())
             }
@@ -62,11 +66,13 @@ class RepositoryImpl @Inject constructor(
         try {
             val response = api.getStudentDetail(nim)
             val responseBody = response.body()
-            if (response.isSuccessful && responseBody != null) {
-                val studentProfile = DataMapper.mapStudentProfileResponseToStudentProfile(responseBody.mahasiswa)
-                result.value = Resource.success(studentProfile)
-            } else if (responseBody == null) {
-                result.value = Resource.empty()
+            if (response.isSuccessful) {
+                if (responseBody != null) {
+                    val studentProfile = DataMapper.mapStudentProfileResponseToStudentProfile(responseBody.mahasiswa)
+                    result.value = Resource.success(studentProfile)
+                } else {
+                    result.value = Resource.empty()
+                }
             } else {
                 result.value = Resource.error(response.message())
             }
@@ -82,10 +88,12 @@ class RepositoryImpl @Inject constructor(
         try {
             val response = api.login(nidn, password)
             val responseBody = response.body()
-            if (response.isSuccessful && responseBody != null) {
-                result.value = Resource.success(responseBody.token)
-            } else if (responseBody == null) {
-                result.value = Resource.empty()
+            if (response.isSuccessful) {
+                if (responseBody != null) {
+                    result.value = Resource.success(responseBody.token)
+                } else {
+                    result.value = Resource.empty()
+                }
             } else {
                 result.value = Resource.error(response.message())
             }
