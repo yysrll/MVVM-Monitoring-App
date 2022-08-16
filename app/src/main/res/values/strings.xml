@@ -21,5 +21,6 @@
     <string name="error_dialog_title">Ups, terjadi kesalahan</string>
     <string name="error_dialog_description">Data yang anda minta sedang bermasalah, cobalah beberapa saat lagi!</string>
     <string name="try_again">Coba lagi</string>
+    <string name="data_empty">Tidak ada data</string>
 
 </resources>

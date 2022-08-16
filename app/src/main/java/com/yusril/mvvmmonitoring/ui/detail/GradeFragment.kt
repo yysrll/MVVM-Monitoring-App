@@ -57,6 +57,7 @@ class GradeFragment : Fragment() {
                     }
                     Status.SUCCESS -> {
                         showLoading(false)
+                        showEmptyView(false)
                         Log.d("$TAG ${TAB_TITLES[index-1]}", "Success: ${listStudyResult.data}")
                         listStudyResult.data?.let { data ->
                             subjectAdapter.addStudySubject(data)
@@ -73,6 +74,7 @@ class GradeFragment : Fragment() {
                     }
                     Status.EMPTY -> {
                         showLoading(false)
+                        showEmptyView(true)
                         Log.d("$TAG ${TAB_TITLES[index-1]}", "Empty")
                     }
                     Status.ERROR -> {
@@ -85,6 +87,10 @@ class GradeFragment : Fragment() {
         }
 
         setErrorAlertDialog()
+    }
+
+    private fun showEmptyView(isEmpty: Boolean) {
+        binding.emptyStatus.root.isInvisible = !isEmpty
     }
 
     private fun setErrorAlertDialog() {

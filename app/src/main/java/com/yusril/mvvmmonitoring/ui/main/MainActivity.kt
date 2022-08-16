@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     Status.SUCCESS -> {
                         showLoading(false)
+                        showEmptyView(false)
                         it.data?.let { data ->
                             studentAdapter.addStudents(data)
                         }
@@ -72,6 +73,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     Status.EMPTY -> {
                         showLoading(false)
+                        showEmptyView(true)
                         Log.d(TAG, "Empty")
                     }
                     Status.ERROR -> {
@@ -91,6 +93,10 @@ class MainActivity : AppCompatActivity() {
         ) {
             viewModel.getStudent(lecturer.nidn)
         }
+    }
+
+    private fun showEmptyView(isEmpty: Boolean) {
+        studentListBinding.emptyStatus.root.isInvisible = !isEmpty
     }
 
     private fun showLoading(isLoading: Boolean) {

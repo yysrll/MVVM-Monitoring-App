@@ -79,6 +79,19 @@
         tools:listitem="@layout/item_row_subject" />
 
 
+    <include
+        android:id="@+id/empty_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        layout="@layout/view_empty"
+        app:layout_constraintTop_toBottomOf="@id/tv_total_gpa_value"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/progress_bar"
