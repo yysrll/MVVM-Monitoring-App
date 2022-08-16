@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         lecturer = intent.getParcelableExtra<Lecturer>(LECTURER) as Lecturer
         initRecyclerView()
 
-        binding.tvLecturerName.text = getString(R.string.lecturer_name, lecturer.name)
+        binding.tvLecturerName.text = lecturer.name
 
         viewModel.getStudent(lecturer.nidn)
 
