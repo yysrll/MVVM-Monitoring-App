@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.yusril.mvvmmonitoring.databinding.ActivitySplashScreenBinding
 import com.yusril.mvvmmonitoring.ui.login.LoginActivity
 import com.yusril.mvvmmonitoring.ui.main.MainActivity
+import com.yusril.mvvmmonitoring.utils.Constant.SPLASH_SCREEN_DURATION_IN_MILLIS
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,9 +33,9 @@ class SplashScreenActivity : AppCompatActivity() {
                     } else {
                         MainActivity.start(this@SplashScreenActivity, lecturer)
                     }
+                    finish()
                 }
             }
-            finish()
-        }, 3000)
+        }, SPLASH_SCREEN_DURATION_IN_MILLIS)
     }
 }
