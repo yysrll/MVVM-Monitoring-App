@@ -1,6 +1,5 @@
 package com.yusril.mvvmmonitoring.core.data
 
-import android.util.Log
 import com.yusril.mvvmmonitoring.core.data.local.PreferenceDataSource
 import com.yusril.mvvmmonitoring.core.data.remote.MonitoringApi
 import com.yusril.mvvmmonitoring.core.domain.model.*
@@ -65,7 +64,7 @@ class RepositoryImpl @Inject constructor(
             val response = api.getStudentDetail(nim)
             val responseBody = response.body()
             if (response.isSuccessful) {
-                if (responseBody != null) {
+                if (responseBody?.mahasiswa != null) {
                     val studentProfile = DataMapper.mapStudentProfileResponseToStudentProfile(responseBody.mahasiswa)
                     result.value = Resource.success(studentProfile)
                 } else {
@@ -87,7 +86,7 @@ class RepositoryImpl @Inject constructor(
             val response = api.getSemester()
             val responseBody = response.body()
             if (response.isSuccessful) {
-                if (responseBody != null) {
+                if (responseBody?.semesters!!.isNotEmpty()) {
                     result.value = Resource.success(
                         DataMapper.mapListSemesterResponseToListSemester(responseBody.semesters)
                     )
@@ -110,7 +109,7 @@ class RepositoryImpl @Inject constructor(
             val response = api.login(nidn, password)
             val responseBody = response.body()
             if (response.isSuccessful) {
-                if (responseBody != null) {
+                if (responseBody?.token!!.isNotEmpty()) {
                     result.value = Resource.success(responseBody.token)
                 } else {
                     result.value = Resource.empty()
