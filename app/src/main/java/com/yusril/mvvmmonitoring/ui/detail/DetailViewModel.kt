@@ -2,6 +2,7 @@ package com.yusril.mvvmmonitoring.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yusril.mvvmmonitoring.core.domain.model.Semester
 import com.yusril.mvvmmonitoring.core.domain.model.StudentProfile
 import com.yusril.mvvmmonitoring.core.domain.model.StudyResult
 import com.yusril.mvvmmonitoring.core.domain.repository.MainRepository
@@ -24,6 +25,10 @@ class DetailViewModel @Inject constructor(
     private val _studentProfile = MutableStateFlow<Resource<StudentProfile>>(Resource.empty())
     val studentProfile : StateFlow<Resource<StudentProfile>> = _studentProfile
 
+    private val _listSemester = MutableStateFlow<Resource<List<Semester>>>(Resource.empty())
+    val listSemester : StateFlow<Resource<List<Semester>>> = _listSemester
+
+
 
     fun getListStudyGrade(nim: String, semester_code: String? = null) {
         _listStudyGrade.value = Resource.loading()
@@ -36,6 +41,13 @@ class DetailViewModel @Inject constructor(
         _studentProfile.value = Resource.loading()
         viewModelScope.launch(Dispatchers.IO) {
             _studentProfile.value = repository.getStudentProfile(nim).value
+        }
+    }
+
+    fun getSemester() {
+        _listSemester.value = Resource.loading()
+        viewModelScope.launch(Dispatchers.IO) {
+            _listSemester.value = repository.getSemester().value
         }
     }
 }

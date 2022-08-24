@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yusril.mvvmmonitoring.R
+import com.yusril.mvvmmonitoring.core.domain.model.Semester
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.presentation.SubjectAdapter
 import com.yusril.mvvmmonitoring.core.vo.Status
@@ -28,6 +31,8 @@ class GradeFragment : Fragment() {
     private lateinit var binding: FragmentGradeBinding
     private lateinit var student: Student
     private lateinit var subjectAdapter: SubjectAdapter
+    private var semesterCode: String? = null
+    private var semesterItems: List<Semester> = listOf()
     private val viewModel: DetailViewModel by viewModels()
 
     override fun onCreateView(
@@ -46,13 +51,15 @@ class GradeFragment : Fragment() {
         student = activity?.intent?.getParcelableExtra(EXTRA_STUDENT)!!
 
         initRecyclerView()
+        setErrorAlertDialog()
+        showSemester(index)
 
-        getListStudyGrade(index, student)
         lifecycleScope.launchWhenCreated {
             viewModel.listStudyGrade.collect { listStudyResult ->
                 when (listStudyResult.status) {
                     Status.LOADING -> {
                         showLoading(true)
+                        showEmptyView(false)
                         Log.d("$TAG ${TAB_TITLES[index-1]}", "Loading")
                     }
                     Status.SUCCESS -> {
@@ -79,6 +86,7 @@ class GradeFragment : Fragment() {
                     }
                     Status.ERROR -> {
                         showLoading(false)
+                        showEmptyView(false)
                         errorAlertDialog.show()
                         Log.d("$TAG ${TAB_TITLES[index-1]}", "Error: ${listStudyResult.message}")
                     }
@@ -86,11 +94,71 @@ class GradeFragment : Fragment() {
             }
         }
 
-        setErrorAlertDialog()
+        if (index == 1) {
+            lifecycleScope.launchWhenCreated {
+                viewModel.listSemester.collect { listSemesterResult ->
+                    when (listSemesterResult.status) {
+                        Status.SUCCESS -> {
+                            Log.d(TAG, "Semester success: ${listSemesterResult.data}")
+                            listSemesterResult.data?.let { data ->
+                                semesterItems = data
+                                val semesterString = data.map {
+                                    "Semester " + it.jenis + " " + it.tahun_ajaran
+                                }
+                                Log.d("$TAG ${TAB_TITLES[index-1]}", "Semester: $semesterString")
+                                val myAdapter = ArrayAdapter(
+                                    requireContext(),
+                                    R.layout.semester_list_item,
+                                    semesterString
+                                )
+                                binding.menuSemester.apply {
+                                    setAdapter(myAdapter)
+                                    setText(semesterString[0], false)
+                                }
+                                semesterCode = data[0].kode
+                                Log.d(TAG, "Semester code: $semesterCode")
+                                getListStudyGrade(index, student, semesterCode)
+                            }
+                        }
+                        Status.EMPTY -> {
+                            Log.d(TAG, "Semester Empty")
+                        }
+                        else -> {
+                            Log.d(TAG, "Semester error: ${listSemesterResult.message}")
+                            setErrorAlertDialog()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showSemester(index: Int) {
+        binding.menuSemesterLayout.isVisible = index != 2
+        if (index == 1) {
+            setSemester(index)
+        }
+        getListStudyGrade(index, student, semesterCode)
+    }
+
+    private fun setSemester(index: Int) {
+        viewModel.getSemester()
+
+        binding.menuSemester.apply {
+            setOnItemClickListener { _, _, position, _ ->
+                Log.d(TAG, "onClick position: $position")
+                semesterCode = semesterItems[position].kode
+                getListStudyGrade(index, student, semesterCode)
+            }
+        }
     }
 
     private fun showEmptyView(isEmpty: Boolean) {
         binding.emptyStatus.root.isInvisible = !isEmpty
+        binding.rvSubjects.isInvisible = isEmpty
+        binding.tvTotalSksValue.text = "0"
+        binding.tvTotalSubjectValue.text = "0"
+        binding.tvTotalGpaValue.text = "0"
     }
 
     private fun setErrorAlertDialog() {
@@ -114,9 +182,9 @@ class GradeFragment : Fragment() {
         }
     }
 
-    private fun getListStudyGrade(index: Int, student: Student) {
+    private fun getListStudyGrade(index: Int, student: Student, code: String?) {
         when(index) {
-            1 -> viewModel.getListStudyGrade(student.nim, "20212")
+            1 -> viewModel.getListStudyGrade(student.nim, code)
             2 -> viewModel.getListStudyGrade(student.nim)
         }
     }

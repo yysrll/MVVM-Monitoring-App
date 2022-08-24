@@ -1,9 +1,7 @@
 package com.yusril.mvvmmonitoring.utils
 
-import com.yusril.mvvmmonitoring.core.data.remote.models.ListStudyResultResponse
-import com.yusril.mvvmmonitoring.core.data.remote.models.StudentProfileResponse
-import com.yusril.mvvmmonitoring.core.data.remote.models.StudentResponse
-import com.yusril.mvvmmonitoring.core.data.remote.models.StudyResultResponse
+import com.yusril.mvvmmonitoring.core.data.remote.models.*
+import com.yusril.mvvmmonitoring.core.domain.model.Semester
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.domain.model.StudentProfile
 import com.yusril.mvvmmonitoring.core.domain.model.StudyResult
@@ -44,5 +42,19 @@ object DataMapper {
             nim = mahasiswa.nim,
             name = mahasiswa.nama,
         )
+    }
+
+    fun mapListSemesterResponseToListSemester(list: List<SemesterResponse>) : List<Semester> {
+        val listSemester = ArrayList<Semester>()
+        list.map {
+            val semester = Semester(
+                jenis = it.jenis,
+                kode = it.kode,
+                tahun = it.tahun,
+                tahun_ajaran = it.tahun_ajaran,
+            )
+            listSemester.add(semester)
+        }
+        return listSemester
     }
 }
