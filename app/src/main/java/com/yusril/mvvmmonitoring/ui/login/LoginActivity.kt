@@ -18,6 +18,7 @@ import com.yusril.mvvmmonitoring.core.vo.Status
 import com.yusril.mvvmmonitoring.databinding.ActivityLoginBinding
 import com.yusril.mvvmmonitoring.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -39,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
             )
         }
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             viewModel.loginState.collect {
                 when (it.status) {
                     Status.LOADING -> {
@@ -47,16 +48,9 @@ class LoginActivity : AppCompatActivity() {
                         isLoading(true)
                     }
                     Status.SUCCESS -> {
-                        lecturer = Lecturer(
-                            name = "Philip Lackner",
-                            nidn = binding.etNip.text.toString(),
-                            token = it.data.toString()
-                        )
-                        viewModel.setNewLecturerLogin(lecturer)
-                        MainActivity.start(this@LoginActivity, lecturer)
+                        MainActivity.start(this@LoginActivity, viewModel.token)
                         finish()
                         isLoading(false)
-                        Log.d(TAG, "Success: token ${it.data}")
                     }
                     Status.EMPTY -> {
                         Log.d(TAG, "Empty")

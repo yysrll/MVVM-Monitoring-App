@@ -22,5 +22,7 @@
     <string name="try_again">Coba lagi</string>
     <string name="data_empty">Tidak ada data</string>
     <string name="semeseter">Semester</string>
+    <string name="error_dialog_get_lecturer">Data dosen tidak ditemukan</string>
+    <string name="login_again">Login kembali</string>
 
 </resources>

@@ -6,6 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Lecturer(
     var name: String,
-    var nidn: String,
-    var token: String
+    var nidn: String
 ) : Parcelable

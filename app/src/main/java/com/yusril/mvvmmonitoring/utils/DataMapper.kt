@@ -37,13 +37,6 @@ object DataMapper {
         return listStudyResult
     }
 
-    fun mapStudentProfileResponseToStudentProfile(mahasiswa: StudentProfileResponse): StudentProfile {
-        return StudentProfile(
-            nim = mahasiswa.nim,
-            name = mahasiswa.nama,
-        )
-    }
-
     fun mapListSemesterResponseToListSemester(list: List<SemesterResponse>) : List<Semester> {
         val listSemester = ArrayList<Semester>()
         list.map {

@@ -20,9 +20,11 @@ import com.yusril.mvvmmonitoring.core.presentation.SubjectAdapter
 import com.yusril.mvvmmonitoring.core.vo.Status
 import com.yusril.mvvmmonitoring.databinding.FragmentGradeBinding
 import com.yusril.mvvmmonitoring.ui.detail.DetailActivity.Companion.EXTRA_STUDENT
+import com.yusril.mvvmmonitoring.ui.detail.DetailActivity.Companion.EXTRA_TOKEN
 import com.yusril.mvvmmonitoring.ui.detail.DetailActivity.Companion.TAB_TITLES
 import com.yusril.mvvmmonitoring.ui.utils.MyAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GradeFragment : Fragment() {
@@ -30,6 +32,7 @@ class GradeFragment : Fragment() {
     private lateinit var errorAlertDialog: AlertDialog
     private lateinit var binding: FragmentGradeBinding
     private lateinit var student: Student
+    private lateinit var token: String
     private lateinit var subjectAdapter: SubjectAdapter
     private var semesterCode: String? = null
     private var semesterItems: List<Semester> = listOf()
@@ -49,12 +52,13 @@ class GradeFragment : Fragment() {
 
         val index = requireArguments().getInt(ARG_SECTION_NUMBER, 0)
         student = activity?.intent?.getParcelableExtra(EXTRA_STUDENT)!!
+        token = activity?.intent?.getStringExtra(EXTRA_TOKEN).toString()
 
         initRecyclerView()
-        setErrorAlertDialog()
+        setErrorAlertDialog(index)
         showSemester(index)
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
             viewModel.listStudyGrade.collect { listStudyResult ->
                 when (listStudyResult.status) {
                     Status.LOADING -> {
@@ -125,7 +129,7 @@ class GradeFragment : Fragment() {
                         }
                         else -> {
                             Log.d(TAG, "Semester error: ${listSemesterResult.message}")
-                            setErrorAlertDialog()
+                            if (listSemesterResult.status == Status.ERROR) errorAlertDialog.show()
                         }
                     }
                 }
@@ -142,7 +146,7 @@ class GradeFragment : Fragment() {
     }
 
     private fun setSemester(index: Int) {
-        viewModel.getSemester()
+        viewModel.getSemester(token)
 
         binding.menuSemester.apply {
             setOnItemClickListener { _, _, position, _ ->
@@ -161,14 +165,14 @@ class GradeFragment : Fragment() {
         binding.tvTotalGpaValue.text = "0"
     }
 
-    private fun setErrorAlertDialog() {
+    private fun setErrorAlertDialog(index: Int) {
         errorAlertDialog = MyAlertDialog().setErrorAlertDialog(
             requireActivity(),
             resources.getString(R.string.error_dialog_title),
             resources.getString(R.string.error_dialog_description),
             resources.getString(R.string.try_again)
         ) {
-            viewModel.getStudentProfile(student.nim)
+            setSemester(index)
         }
     }
 
@@ -184,8 +188,8 @@ class GradeFragment : Fragment() {
 
     private fun getListStudyGrade(index: Int, student: Student, code: String?) {
         when(index) {
-            1 -> viewModel.getListStudyGrade(student.nim, code)
-            2 -> viewModel.getListStudyGrade(student.nim)
+            1 -> viewModel.getListStudyGrade(token, student.nim, code)
+            2 -> viewModel.getListStudyGrade(token, student.nim)
         }
     }
 

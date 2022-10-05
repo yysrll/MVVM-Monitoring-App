@@ -1,5 +1,6 @@
 package com.yusril.mvvmmonitoring.core.data
 
+import android.util.Log
 import com.yusril.mvvmmonitoring.core.data.local.PreferenceDataSource
 import com.yusril.mvvmmonitoring.core.data.remote.MonitoringApi
 import com.yusril.mvvmmonitoring.core.domain.model.*
@@ -15,31 +16,43 @@ class RepositoryImpl @Inject constructor(
     private val api: MonitoringApi,
     private val local: PreferenceDataSource
 ) : MainRepository {
-    override suspend fun getListStudent(nidn: String): StateFlow<Resource<List<Student>>> {
-        val result = MutableStateFlow<Resource<List<Student>>>(Resource.empty())
+
+    override suspend fun getListStudent(
+        token: String,
+        nidn: String
+    ): StateFlow<Resource<List<Student>>> {
+        val result = MutableStateFlow<Resource<List<Student>>>(Resource.loading())
+        Log.d("Repository", "getListStudent $token")
         try {
-            val response = api.getStudent(nidn)
+            val response = api.getStudent(token, nidn)
             val responseBody = response.body()
             if (response.isSuccessful) {
                 if (responseBody?.mahasiswas!!.isNotEmpty()) {
                     val listStudent = DataMapper.mapStudentResponseToStudent(responseBody.mahasiswas)
                     result.value = Resource.success(listStudent)
+                    Log.d("Repository", "getListStudent success")
                 } else {
                     result.value = Resource.empty()
+                    Log.d("Repository", "getListStudent empty")
                 }
             } else {
                 result.value = Resource.error(response.message())
             }
         } catch (e: Exception) {
+            Log.d("Repository", "getListStudent error")
             result.value = Resource.error(e.message ?: "Something went wrong")
         }
         return result
     }
 
-    override suspend fun getStudyResult(nim: String, semester_code: String?): StateFlow<Resource<List<StudyResult>>> {
+    override suspend fun getStudyResult(
+        token: String,
+        nim: String,
+        semester_code: String?
+    ): StateFlow<Resource<List<StudyResult>>> {
         val result = MutableStateFlow<Resource<List<StudyResult>>>(Resource.empty())
         try {
-            val response = api.getStudyResult(nim, semester_code)
+            val response = api.getStudyResult(token, nim, semester_code)
             val responseBody = response.body()
             if (response.isSuccessful) {
                 if (responseBody?.kartu_hasil_studi!!.isNotEmpty()) {
@@ -58,32 +71,10 @@ class RepositoryImpl @Inject constructor(
         return result
     }
 
-    override suspend fun getStudentProfile(nim: String): StateFlow<Resource<StudentProfile>> {
-        val result = MutableStateFlow<Resource<StudentProfile>>(Resource.empty())
-        try {
-            val response = api.getStudentDetail(nim)
-            val responseBody = response.body()
-            if (response.isSuccessful) {
-                if (responseBody?.mahasiswa != null) {
-                    val studentProfile = DataMapper.mapStudentProfileResponseToStudentProfile(responseBody.mahasiswa)
-                    result.value = Resource.success(studentProfile)
-                } else {
-                    result.value = Resource.empty()
-                }
-            } else {
-                result.value = Resource.error(response.message())
-            }
-        } catch (e: Exception) {
-            result.value = Resource.error(e.message ?: "Something went wrong")
-        }
-
-        return result
-    }
-
-    override suspend fun getSemester(): StateFlow<Resource<List<Semester>>> {
+    override suspend fun getSemester(token: String): StateFlow<Resource<List<Semester>>> {
         val result = MutableStateFlow<Resource<List<Semester>>>(Resource.empty())
         try {
-            val response = api.getSemester()
+            val response = api.getSemester(token)
             val responseBody = response.body()
             if (response.isSuccessful) {
                 if (responseBody?.semesters!!.isNotEmpty()) {
@@ -109,8 +100,9 @@ class RepositoryImpl @Inject constructor(
             val response = api.login(nidn, password)
             val responseBody = response.body()
             if (response.isSuccessful) {
-                if (responseBody?.token!!.isNotEmpty()) {
-                    result.value = Resource.success(responseBody.token)
+                if (responseBody?.access_token!!.isNotEmpty()) {
+                    local.setToken(responseBody.access_token)
+                    result.value = Resource.success("Login successfully")
                 } else {
                     result.value = Resource.empty()
                 }
@@ -119,14 +111,37 @@ class RepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             result.value = Resource.error(e.message ?: "Something went wrong")
+            println("error login ${e.message}")
         }
 
         return result
     }
 
+    override suspend fun getProfile(token: String): StateFlow<Resource<String>> {
+        val result = MutableStateFlow<Resource<String>>(Resource.loading())
+        Log.d("Repository", "getProfile token $token")
+        try {
+            val response = api.getProfile(token)
+            val responseBody = response.body()
+            if (response.isSuccessful) {
+                val lecturer = Lecturer(
+                    responseBody!!.user.name,
+                    responseBody.user.dosen.nip
+                )
+                local.setNewLecturer(lecturer)
+                result.value = Resource.success("Get Profile Successfully")
+            } else {
+                result.value = Resource.error("get profile failed")
+            }
+        } catch (e: Exception) {
+            result.value = Resource.error(e.message ?: "Something went wrong")
+            Log.d("Repository", "getProfile error ${e.message}")
+        }
+
+        return result
+    }
+
+    override fun getToken(): Flow<String> = local.getToken()
     override fun getCurrentLecturer(): Flow<Lecturer> = local.getCurrentUser()
-
-    override suspend fun setNewLecturer(lecturer: Lecturer) = local.setNewLecturer(lecturer)
-
     override suspend fun deleteLecturer() = local.deleteLecturer()
 }

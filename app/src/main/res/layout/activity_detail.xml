@@ -35,29 +35,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         >
 
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
-<!--            android:id="@+id/detail_student_image"-->
-<!--            android:layout_width="100dp"-->
-<!--            android:layout_height="100dp"-->
-<!--            tools:src="@tools:sample/avatars"-->
-<!--            android:layout_marginTop="24dp"-->
-<!--            />-->
-
-        <TextView
-            android:id="@+id/detail_student_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Yusril"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            />
-
         <TextView
             android:id="@+id/detail_student_nim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="D121171007"
-            android:layout_marginTop="4dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
             />
 
         <TextView

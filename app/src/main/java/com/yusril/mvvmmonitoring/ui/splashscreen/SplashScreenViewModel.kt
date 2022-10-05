@@ -11,5 +11,6 @@ import javax.inject.Inject
 class SplashScreenViewModel @Inject constructor(
     private val repository: MainRepository
 ) : ViewModel() {
-    fun getCurrentLecturerLogin(): Flow<Lecturer> = repository.getCurrentLecturer()
+
+    fun token(): Flow<String> = repository.getToken()
 }

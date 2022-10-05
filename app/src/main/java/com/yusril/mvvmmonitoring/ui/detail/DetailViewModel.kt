@@ -22,32 +22,22 @@ class DetailViewModel @Inject constructor(
     private val _listStudyGrade = MutableStateFlow<Resource<List<StudyResult>>>(Resource.empty())
     val listStudyGrade : StateFlow<Resource<List<StudyResult>>> = _listStudyGrade
 
-    private val _studentProfile = MutableStateFlow<Resource<StudentProfile>>(Resource.empty())
-    val studentProfile : StateFlow<Resource<StudentProfile>> = _studentProfile
-
     private val _listSemester = MutableStateFlow<Resource<List<Semester>>>(Resource.empty())
     val listSemester : StateFlow<Resource<List<Semester>>> = _listSemester
 
 
 
-    fun getListStudyGrade(nim: String, semester_code: String? = null) {
+    fun getListStudyGrade(token: String, nim: String, semester_code: String? = null) {
         _listStudyGrade.value = Resource.loading()
         viewModelScope.launch(Dispatchers.IO) {
-            _listStudyGrade.value = repository.getStudyResult(nim, semester_code).value
+            _listStudyGrade.value = repository.getStudyResult(token, nim, semester_code).value
         }
     }
 
-    fun getStudentProfile(nim: String) {
-        _studentProfile.value = Resource.loading()
-        viewModelScope.launch(Dispatchers.IO) {
-            _studentProfile.value = repository.getStudentProfile(nim).value
-        }
-    }
-
-    fun getSemester() {
+    fun getSemester(token: String) {
         _listSemester.value = Resource.loading()
         viewModelScope.launch(Dispatchers.IO) {
-            _listSemester.value = repository.getSemester().value
+            _listSemester.value = repository.getSemester(token).value
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.yusril.mvvmmonitoring.ui.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yusril.mvvmmonitoring.core.domain.model.Lecturer
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.domain.repository.MainRepository
 import com.yusril.mvvmmonitoring.core.vo.Resource
@@ -17,15 +19,17 @@ class MainViewModel @Inject constructor (
     private val repository: MainRepository
     ): ViewModel() {
 
-    private val _students = MutableStateFlow<Resource<List<Student>>>(Resource.empty())
+    private val _students = MutableStateFlow<Resource<List<Student>>>(Resource.loading())
     val students: StateFlow<Resource<List<Student>>> = _students
 
-    fun getStudent(nidn: String) {
-        _students.value = Resource.loading()
+    fun getStudent(token: String, nidn: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _students.value = repository.getListStudent(nidn).value
+            Log.d("MainViewModel", nidn)
+            _students.value = repository.getListStudent(token, nidn).value
         }
     }
+
+    fun getLecturer() = repository.getCurrentLecturer()
 
     fun deleteLecturerLogin() = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteLecturer()

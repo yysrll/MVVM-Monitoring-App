@@ -11,6 +11,7 @@ import com.yusril.mvvmmonitoring.ui.login.LoginActivity
 import com.yusril.mvvmmonitoring.ui.main.MainActivity
 import com.yusril.mvvmmonitoring.utils.Constant.SPLASH_SCREEN_DURATION_IN_MILLIS
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SplashScreenActivity : AppCompatActivity() {
@@ -26,12 +27,12 @@ class SplashScreenActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            lifecycleScope.launchWhenCreated {
-                viewModel.getCurrentLecturerLogin().collect { lecturer ->
-                    if (lecturer.token == "") {
+            lifecycleScope.launch {
+                viewModel.token().collect { token ->
+                    if (token == "") {
                         LoginActivity.start(this@SplashScreenActivity)
                     } else {
-                        MainActivity.start(this@SplashScreenActivity, lecturer)
+                        MainActivity.start(this@SplashScreenActivity, token)
                     }
                     finish()
                 }

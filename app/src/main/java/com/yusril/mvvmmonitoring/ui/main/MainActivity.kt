@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +24,7 @@ import com.yusril.mvvmmonitoring.ui.detail.DetailActivity
 import com.yusril.mvvmmonitoring.ui.login.LoginActivity
 import com.yusril.mvvmmonitoring.ui.utils.MyAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var studentListBinding: StudentListBinding
     private lateinit var studentAdapter: StudentAdapter
     private lateinit var lecturer: Lecturer
-    private lateinit var errorAlertDialog: AlertDialog
+    private lateinit var token: String
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,53 +45,81 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.apply {
             title = ""
             elevation = 0f
-            setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this@MainActivity, R.color.primary_500)))
+            setBackgroundDrawable(
+                ColorDrawable(
+                    ContextCompat.getColor(
+                        this@MainActivity,
+                        R.color.primary_500
+                    )
+                )
+            )
         }
 
-        lecturer = intent.getParcelableExtra<Lecturer>(LECTURER) as Lecturer
-        initRecyclerView()
+        token = intent.getStringExtra(TOKEN_EXTRA).toString()
 
-        binding.tvLecturerName.text = lecturer.name
-
-        viewModel.getStudent(lecturer.nidn)
-
-
-        lifecycleScope.launchWhenCreated {
-            viewModel.students.collect {
-                when (it.status) {
-                    Status.LOADING -> {
-                        Log.d(TAG, "Loading")
-                        showLoading(true)
-                    }
-                    Status.SUCCESS -> {
-                        showLoading(false)
-                        showEmptyView(false)
-                        it.data?.let { data ->
-                            studentAdapter.addStudents(data)
-                        }
-                        Log.d(TAG, "Success: ${it.data}")
-                    }
-                    Status.EMPTY -> {
-                        showLoading(false)
-                        showEmptyView(true)
-                        Log.d(TAG, "Empty")
-                    }
-                    Status.ERROR -> {
-                        showLoading(false)
-                        errorAlertDialog.show()
-                        Log.d(TAG, "Error: ${it.message}")
-                    }
+        lifecycleScope.launch {
+            Log.d(TAG, "showStudent start")
+            launch {
+                showStudent()
+            }
+            Log.d(TAG, "showStudent end")
+            viewModel.getLecturer().collect {
+                Log.d(TAG, "getLecturer start")
+                if (it.nidn == "") {
+                    MyAlertDialog().setErrorAlertDialog(
+                        this@MainActivity,
+                        resources.getString(R.string.error_dialog_title),
+                        resources.getString(R.string.error_dialog_get_lecturer),
+                        resources.getString(R.string.login_again),
+                    ) {
+                        viewModel.deleteLecturerLogin()
+                        LoginActivity.start(this@MainActivity)
+                        finish()
+                    }.show()
+                } else {
+                    lecturer = it
+                    binding.tvLecturerName.text = lecturer.name
+                    viewModel.getStudent(token, lecturer.nidn)
                 }
             }
         }
 
-        errorAlertDialog = MyAlertDialog().setErrorAlertDialog(
-            this,
-            resources.getString(R.string.error_dialog_title),
-            resources.getString(R.string.error_dialog_description),
-            resources.getString(R.string.try_again)
-        ) {
-            viewModel.getStudent(lecturer.nidn)
+        initRecyclerView()
+    }
+
+    private suspend fun showStudent(){
+        viewModel.students.collect {
+            when (it.status) {
+                Status.LOADING -> {
+                    Log.d(TAG, "Loading student")
+                    showLoading(true)
+                }
+                Status.SUCCESS -> {
+                    showLoading(false)
+                    showEmptyView(false)
+                    it.data?.let { data ->
+                        studentAdapter.addStudents(data)
+                    }
+                    Log.d(TAG, "Success: ${it.data}")
+                }
+                Status.EMPTY -> {
+                    showLoading(false)
+                    showEmptyView(true)
+                    Log.d(TAG, "Empty")
+                }
+                Status.ERROR -> {
+                    showLoading(false)
+                    MyAlertDialog().setErrorAlertDialog(
+                        this,
+                        resources.getString(R.string.error_dialog_title),
+                        resources.getString(R.string.error_dialog_description),
+                        resources.getString(R.string.try_again)
+                    ) {
+                        viewModel.getStudent(token, lecturer.nidn)
+                    }.show()
+                    Log.d(TAG, "Error: ${it.message}")
+                }
+            }
         }
     }
 
@@ -114,7 +142,7 @@ class MainActivity : AppCompatActivity() {
         }
         studentAdapter.setOnItemClickCallback(object : StudentAdapter.OnItemClickCallback {
             override fun onItemClicked(student: Student) {
-                DetailActivity.start(this@MainActivity, student)
+                DetailActivity.start(this@MainActivity, student, token)
             }
         })
     }
@@ -144,10 +172,10 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val TAG = MainActivity::class.simpleName
-        const val LECTURER = "lecturer"
-        fun start(activity: Activity, lecturer: Lecturer) {
+        private const val TOKEN_EXTRA = "TOKEN"
+        fun start(activity: Activity, token: String) {
             val intent = Intent(activity, MainActivity::class.java)
-            intent.putExtra(LECTURER, lecturer)
+            intent.putExtra(TOKEN_EXTRA, token)
             activity.startActivity(intent)
         }
     }

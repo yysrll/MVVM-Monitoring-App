@@ -23,21 +23,32 @@ class PreferenceDataSource @Inject constructor(
     private val lecturerNIDNKey = stringPreferencesKey("lecturer_nidn")
     private val lecturerTokenKey = stringPreferencesKey("lecturer_token")
 
+    fun getToken(): Flow<String> {
+        return context.datastore.data.map {
+            it[lecturerTokenKey] ?: ""
+        }
+    }
+
+    suspend fun setToken(token: String) {
+        context.datastore.edit {
+            it[lecturerTokenKey] = "Bearer $token"
+        }
+    }
+
     fun getCurrentUser(): Flow<Lecturer> {
         return context.datastore.data.map {
             Lecturer(
                 name = it[lecturerNameKey] ?: "",
                 nidn = it[lecturerNIDNKey] ?: "",
-                token = it[lecturerTokenKey] ?: ""
             )
         }
     }
 
     suspend fun setNewLecturer(lecturer: Lecturer) {
+        println("setNewLecturer")
         context.datastore.edit {
             it[lecturerNameKey] = lecturer.name
             it[lecturerNIDNKey] = lecturer.nidn
-            it[lecturerTokenKey] = lecturer.token
         }
     }
 
