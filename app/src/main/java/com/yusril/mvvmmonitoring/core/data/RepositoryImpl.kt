@@ -131,7 +131,7 @@ class RepositoryImpl @Inject constructor(
                 local.setNewLecturer(lecturer)
                 result.value = Resource.success("Get Profile Successfully")
             } else {
-                result.value = Resource.error("get profile failed")
+                result.value = Resource.error("get profile failed ${response.code()}")
             }
         } catch (e: Exception) {
             result.value = Resource.error(e.message ?: "Something went wrong")

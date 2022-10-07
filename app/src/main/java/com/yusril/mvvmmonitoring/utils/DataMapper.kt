@@ -3,7 +3,6 @@ package com.yusril.mvvmmonitoring.utils
 import com.yusril.mvvmmonitoring.core.data.remote.models.*
 import com.yusril.mvvmmonitoring.core.domain.model.Semester
 import com.yusril.mvvmmonitoring.core.domain.model.Student
-import com.yusril.mvvmmonitoring.core.domain.model.StudentProfile
 import com.yusril.mvvmmonitoring.core.domain.model.StudyResult
 
 object DataMapper {

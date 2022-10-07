@@ -99,7 +99,7 @@ class GradeFragment : Fragment() {
         }
 
         if (index == 1) {
-            lifecycleScope.launchWhenCreated {
+            lifecycleScope.launch {
                 viewModel.listSemester.collect { listSemesterResult ->
                     when (listSemesterResult.status) {
                         Status.SUCCESS -> {
@@ -109,7 +109,7 @@ class GradeFragment : Fragment() {
                                 val semesterString = data.map {
                                     "Semester " + it.jenis + " " + it.tahun_ajaran
                                 }
-                                Log.d("$TAG ${TAB_TITLES[index-1]}", "Semester: $semesterString")
+                                Log.d("$TAG ${TAB_TITLES[0]}", "Semester: $semesterString")
                                 val myAdapter = ArrayAdapter(
                                     requireContext(),
                                     R.layout.semester_list_item,

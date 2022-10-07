@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yusril.mvvmmonitoring.R
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.databinding.ItemRowStudentBinding
-import com.yusril.mvvmmonitoring.ui.detail.DetailActivity
 
 class StudentAdapter : RecyclerView.Adapter<StudentAdapter.RecyclerViewHolder>() {
     private val listStudent = ArrayList<Student>()

@@ -3,7 +3,6 @@ package com.yusril.mvvmmonitoring.ui.main
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yusril.mvvmmonitoring.core.domain.model.Lecturer
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.core.domain.repository.MainRepository
 import com.yusril.mvvmmonitoring.core.vo.Resource

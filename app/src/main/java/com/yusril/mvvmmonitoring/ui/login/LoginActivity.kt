@@ -5,15 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.yusril.mvvmmonitoring.R
-import com.yusril.mvvmmonitoring.core.domain.model.Lecturer
 import com.yusril.mvvmmonitoring.core.vo.Status
 import com.yusril.mvvmmonitoring.databinding.ActivityLoginBinding
 import com.yusril.mvvmmonitoring.ui.main.MainActivity
@@ -24,7 +21,6 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var lecturer: Lecturer
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     companion object {
-        val TAG = LoginActivity::class.java.simpleName
+        val TAG: String = LoginActivity::class.java.simpleName
         fun start(activity: Activity) {
             activity.startActivity(Intent(activity, LoginActivity::class.java))
         }

@@ -1,7 +1,6 @@
 package com.yusril.mvvmmonitoring.ui.splashscreen
 
 import androidx.lifecycle.ViewModel
-import com.yusril.mvvmmonitoring.core.domain.model.Lecturer
 import com.yusril.mvvmmonitoring.core.domain.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

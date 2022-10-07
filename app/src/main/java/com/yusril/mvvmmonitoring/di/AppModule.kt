@@ -1,8 +1,6 @@
 package com.yusril.mvvmmonitoring.di
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.yusril.mvvmmonitoring.BuildConfig
 import com.yusril.mvvmmonitoring.core.data.RepositoryImpl
 import com.yusril.mvvmmonitoring.core.data.local.PreferenceDataSource
