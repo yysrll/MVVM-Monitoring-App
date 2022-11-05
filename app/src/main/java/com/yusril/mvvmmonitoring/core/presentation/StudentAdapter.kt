@@ -26,7 +26,6 @@ class StudentAdapter : RecyclerView.Adapter<StudentAdapter.RecyclerViewHolder>()
     class RecyclerViewHolder(private val binding: ItemRowStudentBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(student: Student) {
             with(binding) {
-//                rvRowPhoto.setImageResource(R.drawable.ic_generic_avatar)
                 rvRowName.text = student.nim
                 rvRowNim.text = student.gpa
                 rvRowSks.text = this@RecyclerViewHolder.itemView.context.getString(R.string.total_sks, student.sks)

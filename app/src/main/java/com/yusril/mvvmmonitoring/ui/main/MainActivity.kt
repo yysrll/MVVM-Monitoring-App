@@ -24,6 +24,7 @@ import com.yusril.mvvmmonitoring.ui.detail.DetailActivity
 import com.yusril.mvvmmonitoring.ui.login.LoginActivity
 import com.yusril.mvvmmonitoring.ui.utils.MyAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val startTime = System.currentTimeMillis()
         binding = ActivityMainBinding.inflate(layoutInflater)
         studentListBinding = StudentListBinding.bind(binding.root)
         setContentView(binding.root)
@@ -58,13 +60,10 @@ class MainActivity : AppCompatActivity() {
         token = intent.getStringExtra(TOKEN_EXTRA).toString()
 
         lifecycleScope.launch {
-            Log.d(TAG, "showStudent start")
             launch {
                 showStudent()
             }
-            Log.d(TAG, "showStudent end")
-            viewModel.getLecturer().collect {
-                Log.d(TAG, "getLecturer start")
+            viewModel.getLecturer().first {
                 if (it.nidn == "") {
                     MyAlertDialog().setErrorAlertDialog(
                         this@MainActivity,
@@ -81,17 +80,19 @@ class MainActivity : AppCompatActivity() {
                     binding.tvLecturerName.text = lecturer.name
                     viewModel.getStudent(token, lecturer.nidn)
                 }
+                true
             }
         }
 
         initRecyclerView()
+
+        Log.d("MainActivity Time: ", "execution time ${System.currentTimeMillis() - startTime} ms")
     }
 
     private suspend fun showStudent(){
         viewModel.students.collect {
             when (it.status) {
                 Status.LOADING -> {
-                    Log.d(TAG, "Loading student")
                     showLoading(true)
                 }
                 Status.SUCCESS -> {
@@ -100,12 +101,10 @@ class MainActivity : AppCompatActivity() {
                     it.data?.let { data ->
                         studentAdapter.addStudents(data)
                     }
-                    Log.d(TAG, "Success: ${it.data}")
                 }
                 Status.EMPTY -> {
                     showLoading(false)
                     showEmptyView(true)
-                    Log.d(TAG, "Empty")
                 }
                 Status.ERROR -> {
                     showLoading(false)
@@ -117,7 +116,6 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         viewModel.getStudent(token, lecturer.nidn)
                     }.show()
-                    Log.d(TAG, "Error: ${it.message}")
                 }
             }
         }

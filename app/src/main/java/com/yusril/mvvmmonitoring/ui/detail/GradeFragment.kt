@@ -34,6 +34,7 @@ class GradeFragment : Fragment() {
     private lateinit var student: Student
     private lateinit var token: String
     private lateinit var subjectAdapter: SubjectAdapter
+    private var startTime: Long = 0L
     private var semesterCode: String? = null
     private var semesterItems: List<Semester> = listOf()
     private val viewModel: DetailViewModel by viewModels()
@@ -42,7 +43,7 @@ class GradeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
+        startTime = System.currentTimeMillis()
         binding = FragmentGradeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -64,12 +65,10 @@ class GradeFragment : Fragment() {
                     Status.LOADING -> {
                         showLoading(true)
                         showEmptyView(false)
-                        Log.d("$TAG ${TAB_TITLES[index-1]}", "Loading")
                     }
                     Status.SUCCESS -> {
                         showLoading(false)
                         showEmptyView(false)
-                        Log.d("$TAG ${TAB_TITLES[index-1]}", "Success: ${listStudyResult.data}")
                         listStudyResult.data?.let { data ->
                             subjectAdapter.addStudySubject(data)
                             val sks = data.sumOf { it.sks }
@@ -86,13 +85,11 @@ class GradeFragment : Fragment() {
                     Status.EMPTY -> {
                         showLoading(false)
                         showEmptyView(true)
-                        Log.d("$TAG ${TAB_TITLES[index-1]}", "Empty")
                     }
                     Status.ERROR -> {
                         showLoading(false)
                         showEmptyView(false)
                         errorAlertDialog.show()
-                        Log.d("$TAG ${TAB_TITLES[index-1]}", "Error: ${listStudyResult.message}")
                     }
                 }
             }
@@ -103,13 +100,11 @@ class GradeFragment : Fragment() {
                 viewModel.listSemester.collect { listSemesterResult ->
                     when (listSemesterResult.status) {
                         Status.SUCCESS -> {
-                            Log.d(TAG, "Semester success: ${listSemesterResult.data}")
                             listSemesterResult.data?.let { data ->
                                 semesterItems = data
                                 val semesterString = data.map {
                                     "Semester " + it.jenis + " " + it.tahun_ajaran
                                 }
-                                Log.d("$TAG ${TAB_TITLES[0]}", "Semester: $semesterString")
                                 val myAdapter = ArrayAdapter(
                                     requireContext(),
                                     R.layout.semester_list_item,
@@ -120,21 +115,19 @@ class GradeFragment : Fragment() {
                                     setText(semesterString[0], false)
                                 }
                                 semesterCode = data[0].kode
-                                Log.d(TAG, "Semester code: $semesterCode")
                                 getListStudyGrade(index, student, semesterCode)
                             }
                         }
                         Status.EMPTY -> {
-                            Log.d(TAG, "Semester Empty")
                         }
                         else -> {
-                            Log.d(TAG, "Semester error: ${listSemesterResult.message}")
                             if (listSemesterResult.status == Status.ERROR) errorAlertDialog.show()
                         }
                     }
                 }
             }
         }
+        Log.d("Fragment $index Time: ", "execution time ${System.currentTimeMillis() - startTime} ms")
     }
 
     private fun showSemester(index: Int) {
@@ -150,7 +143,6 @@ class GradeFragment : Fragment() {
 
         binding.menuSemester.apply {
             setOnItemClickListener { _, _, position, _ ->
-                Log.d(TAG, "onClick position: $position")
                 semesterCode = semesterItems[position].kode
                 getListStudyGrade(index, student, semesterCode)
             }

@@ -22,7 +22,6 @@ class RepositoryImpl @Inject constructor(
         nidn: String
     ): StateFlow<Resource<List<Student>>> {
         val result = MutableStateFlow<Resource<List<Student>>>(Resource.loading())
-        Log.d("Repository", "getListStudent $token")
         try {
             val response = api.getStudent(token, nidn)
             val responseBody = response.body()
@@ -30,16 +29,13 @@ class RepositoryImpl @Inject constructor(
                 if (responseBody?.mahasiswas!!.isNotEmpty()) {
                     val listStudent = DataMapper.mapStudentResponseToStudent(responseBody.mahasiswas)
                     result.value = Resource.success(listStudent)
-                    Log.d("Repository", "getListStudent success")
                 } else {
                     result.value = Resource.empty()
-                    Log.d("Repository", "getListStudent empty")
                 }
             } else {
                 result.value = Resource.error(response.message())
             }
         } catch (e: Exception) {
-            Log.d("Repository", "getListStudent error")
             result.value = Resource.error(e.message ?: "Something went wrong")
         }
         return result
@@ -119,7 +115,6 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getProfile(token: String): StateFlow<Resource<String>> {
         val result = MutableStateFlow<Resource<String>>(Resource.loading())
-        Log.d("Repository", "getProfile token $token")
         try {
             val response = api.getProfile(token)
             val responseBody = response.body()
@@ -135,7 +130,6 @@ class RepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             result.value = Resource.error(e.message ?: "Something went wrong")
-            Log.d("Repository", "getProfile error ${e.message}")
         }
 
         return result

@@ -30,19 +30,15 @@ class LoginViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             job.join()
-            Log.d("LoginViewModel", "getProfile")
             _loginState.value = repository.getProfile(token).value
-            Log.d("LoginViewModel", "getProfile end")
         }
     }
 
     private fun getToken() {
         viewModelScope.launch {
-            Log.d("LoginViewModel", "getToken start")
             repository.getToken().collect {
                 token = it
             }
-            Log.d("LoginViewModel", "getToken end")
         }
     }
 }

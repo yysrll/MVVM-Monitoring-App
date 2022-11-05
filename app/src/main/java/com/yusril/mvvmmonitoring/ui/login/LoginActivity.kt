@@ -25,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val startTime = System.currentTimeMillis()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -40,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
             viewModel.loginState.collect {
                 when (it.status) {
                     Status.LOADING -> {
-                        Log.d(TAG, "Loading")
                         isLoading(true)
                     }
                     Status.SUCCESS -> {
@@ -49,11 +49,9 @@ class LoginActivity : AppCompatActivity() {
                         isLoading(false)
                     }
                     Status.EMPTY -> {
-                        Log.d(TAG, "Empty")
                         isLoading(false)
                     }
                     Status.ERROR -> {
-                        Log.d(TAG, "Error: ${it.message}")
                         isLoading(false)
                         Snackbar.make(binding.root, it.message ?: "", Snackbar.LENGTH_LONG)
                             .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.danger_200))
@@ -63,6 +61,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+        Log.d("LoginActivity Time: ", "execution time ${System.currentTimeMillis() - startTime} ms")
     }
 
     private fun isLoading(state: Boolean) {

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.yusril.mvvmmonitoring.databinding.ActivitySplashScreenBinding
@@ -21,6 +22,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val startTime = System.currentTimeMillis()
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -38,5 +40,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 }
             }
         }, SPLASH_SCREEN_DURATION_IN_MILLIS)
+
+        Log.d("SplashScreen Time: ", "execution time ${System.currentTimeMillis() - startTime} ms")
     }
 }

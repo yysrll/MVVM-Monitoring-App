@@ -23,7 +23,6 @@ class MainViewModel @Inject constructor (
 
     fun getStudent(token: String, nidn: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("MainViewModel", nidn)
             _students.value = repository.getListStudent(token, nidn).value
         }
     }
