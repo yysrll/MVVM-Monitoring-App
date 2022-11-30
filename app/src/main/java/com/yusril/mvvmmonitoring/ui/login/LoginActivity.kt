@@ -70,7 +70,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     companion object {
-        val TAG: String = LoginActivity::class.java.simpleName
         fun start(activity: Activity) {
             activity.startActivity(Intent(activity, LoginActivity::class.java))
         }

@@ -17,11 +17,28 @@ interface MonitoringApi {
         @Query("nidn") nidn: String
     ): Response<ListStudentResponse>
 
+    @GET("dosen/persetujuan_krs/getMahasiswa")
+    suspend fun getStudentListKrs(
+        @Header("Authorization") token: String,
+    ): Response<ListStudentKrsResponse>
+
+    @GET("dosen/persetujuan_krs/getMahasiswa")
+    suspend fun getStudentKrs(
+        @Header("Authorization") token: String,
+        @Query("id_mahasiswa") studentId: Int,
+    ): Response<ListKrsResponse>
+
+    @GET("dosen/persetujuan_krs/setujui")
+    suspend fun approveKrs(
+        @Header("Authorization") token: String,
+        @Query("id_kartu_rencana_studi") krsId: Int,
+    ): Response<KrsApprovedResponse>
+
     @GET("service/hasil-studi-mahasiswa")
     suspend fun getStudyResult(
         @Header("Authorization") token: String,
         @Query("nim") nim: String,
-        @Query("kode_semester") semester_code: String? = null
+        @Query("kode_semester") semesterCode: String? = null
     ): Response<ListStudyResultResponse>
 
     @GET("service/semester")

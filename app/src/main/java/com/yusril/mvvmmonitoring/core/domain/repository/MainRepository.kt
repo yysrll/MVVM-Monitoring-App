@@ -6,14 +6,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface MainRepository {
-    suspend fun getListStudent(token: String, nidn: String): StateFlow<Resource<List<Student>>>
-    suspend fun getStudyResult(token: String, nim: String, semester_code: String?): StateFlow<Resource<List<StudyResult>>>
-    suspend fun getSemester(token: String): StateFlow<Resource<List<Semester>>>
+    suspend fun getListStudent(token: String, nidn: String): Resource<List<Student>>
+    suspend fun getStudyResult(token: String, nim: String, semester_code: String?): Resource<ListStudyResult>
+    suspend fun getSemester(token: String): Resource<List<Semester>>
+    suspend fun getKrs(token: String, studentId: Int): Resource<Krs>
+    suspend fun approveKrs(token: String, krsId: Int): Resource<String>
 
-    suspend fun login(nidn: String, password: String): StateFlow<Resource<String>>
-    suspend fun getProfile(token: String): StateFlow<Resource<String>>
+    suspend fun login(nidn: String, password: String): Resource<String>
+    suspend fun getProfile(token: String): Resource<String>
 
-    fun getToken(): Flow<String>
-    fun getCurrentLecturer(): Flow<Lecturer>
+    suspend fun getToken(): String
+    suspend fun getCurrentLecturer(): Lecturer
     suspend fun deleteLecturer()
 }

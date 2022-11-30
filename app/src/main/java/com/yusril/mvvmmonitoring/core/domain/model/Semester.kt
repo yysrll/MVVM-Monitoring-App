@@ -4,5 +4,5 @@ data class Semester(
     var jenis: String,
     var kode: String,
     var tahun: Int,
-    var tahun_ajaran: String,
+    var tahunAjaran: String,
 )

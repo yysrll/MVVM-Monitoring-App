@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/krs_fragment_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.detail.krs.KrsFragment">
+
+    <TextView
+        android:id="@+id/tv_total_sks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Jumlah SKS yang diambil"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_total_sks_value"
+        />
+
+    <TextView
+        android:id="@+id/tv_total_sks_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="0"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/tv_total_sks"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tv_total_subject"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Mata Kuliah yang diambil"
+        app:layout_constraintTop_toBottomOf="@id/tv_total_sks"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_total_subject_value"
+        />
+
+    <TextView
+        android:id="@+id/tv_total_subject_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="0"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/tv_total_subject"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tv_locked_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Status Dikunci"
+        app:layout_constraintTop_toBottomOf="@id/tv_total_subject"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_locked_status_value"
+        />
+
+    <TextView
+        android:id="@+id/tv_locked_status_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Belum Dikunci"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/tv_locked_status"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tv_approved_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Status Disetujui"
+        app:layout_constraintTop_toBottomOf="@id/tv_locked_status"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_approved_status_value"
+        />
+
+    <TextView
+        android:id="@+id/tv_approved_status_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Belum Disetujui"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/tv_approved_status"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_subjects"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_approved_status"
+        tools:listitem="@layout/item_row_subject" />
+
+
+    <include
+        android:id="@+id/empty_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        layout="@layout/view_empty"
+        app:layout_constraintTop_toBottomOf="@id/tv_approved_status"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_approved_status"
+        app:shimmer_auto_start="true"
+        >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <include layout="@layout/placeholder_item_row_subject" />
+                <include layout="@layout/placeholder_item_row_subject" />
+                <include layout="@layout/placeholder_item_row_subject" />
+                <include layout="@layout/placeholder_item_row_subject" />
+                <include layout="@layout/placeholder_item_row_subject" />
+                <include layout="@layout/placeholder_item_row_subject" />
+            </LinearLayout>
+
+        </ScrollView>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

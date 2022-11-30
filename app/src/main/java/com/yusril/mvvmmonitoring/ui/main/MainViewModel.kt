@@ -1,6 +1,5 @@
 package com.yusril.mvvmmonitoring.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yusril.mvvmmonitoring.core.domain.model.Student
@@ -11,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,12 +22,15 @@ class MainViewModel @Inject constructor (
     val students: StateFlow<Resource<List<Student>>> = _students
 
     fun getStudent(token: String, nidn: String) {
+        _students.value = Resource.loading()
         viewModelScope.launch(Dispatchers.IO) {
-            _students.value = repository.getListStudent(token, nidn).value
+            _students.value = repository.getListStudent(token, nidn)
         }
     }
 
-    fun getLecturer() = repository.getCurrentLecturer()
+    fun getLecturer() = runBlocking {
+        repository.getCurrentLecturer()
+    }
 
     fun deleteLecturerLogin() = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteLecturer()

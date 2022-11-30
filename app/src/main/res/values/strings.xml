@@ -11,6 +11,8 @@
 
     <string name="total_student">%1$d mahasiswa</string>
     <string name="total_sks">%1$d SKS</string>
+    <string name="total_ipk">IPK %1$s</string>
+    <string name="total_ipk_sks">IPK %1$s - %2$d SKS</string>
 
     <string name="detail_title">Profil Mahasiswa</string>
     <string name="student_label">Mahasiswa Bimbingan</string>
@@ -24,5 +26,7 @@
     <string name="semeseter">Semester</string>
     <string name="error_dialog_get_lecturer">Data dosen tidak ditemukan</string>
     <string name="login_again">Login kembali</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

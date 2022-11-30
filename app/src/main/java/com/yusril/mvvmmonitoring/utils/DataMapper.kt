@@ -1,9 +1,7 @@
 package com.yusril.mvvmmonitoring.utils
 
 import com.yusril.mvvmmonitoring.core.data.remote.models.*
-import com.yusril.mvvmmonitoring.core.domain.model.Semester
-import com.yusril.mvvmmonitoring.core.domain.model.Student
-import com.yusril.mvvmmonitoring.core.domain.model.StudyResult
+import com.yusril.mvvmmonitoring.core.domain.model.*
 
 object DataMapper {
 
@@ -26,10 +24,10 @@ object DataMapper {
         input.map {
             val studyResult = StudyResult(
                 name = it.nama_mata_kuliah,
-                score_letter = it.nilai_huruf,
-                score_number = it.nilai_angka,
+                scoreLetter = it.nilai_huruf,
+                scoreNumber = it.nilai_angka,
                 sks = it.sks,
-                score_total = it.total_nilai
+                scoreTotal = it.total_nilai
             )
             listStudyResult.add(studyResult)
         }
@@ -43,10 +41,53 @@ object DataMapper {
                 jenis = it.jenis,
                 kode = it.kode,
                 tahun = it.tahun,
-                tahun_ajaran = it.tahun_ajaran,
+                tahunAjaran = it.tahun_ajaran,
             )
             listSemester.add(semester)
         }
         return listSemester
+    }
+
+    fun mergeListStudentKrsResponseToListStudent(
+        listStudent: List<Student>,
+        response: ListStudentKrsResponse
+    ): List<Student> {
+
+        for (i in listStudent.indices) {
+            val resItem = response.mahasiswas.find {
+                it.nim == listStudent[i].nim
+            }
+            listStudent[i].name = resItem?.namaMahasiswa
+            listStudent[i].year = resItem?.angkatan
+            listStudent[i].krsId = resItem?.currentKartuRencanaStudi?.id
+            listStudent[i].krsIsCurrent = resItem?.currentKartuRencanaStudi?.isCurrent == 1
+            listStudent[i].krsIsLocked = resItem?.currentKartuRencanaStudi?.isLocked == 1
+            listStudent[i].krsIsApproved = resItem?.currentKartuRencanaStudi?.isApproved == 1
+        }
+
+        return listStudent
+    }
+
+    fun mapListKrsResponseToKrs(input: ListKrsResponse) : Krs {
+        val listKrs = ArrayList<StudyResult>()
+        input.kartuRencanaStudi.kelasKuliahs.map {
+            val sks = it.mataKuliah.mataKuliahJumlahSkses.find { matkul ->
+                matkul.idTipeSks == it.mataKuliah.idKelasKuliahJenis
+            }
+            sks?.jumlahSks?.let { total_sks ->
+                listKrs.add(
+                    StudyResult(
+                        name = it.mataKuliah.namaResmi,
+                        sks = total_sks
+                    )
+                )
+            }
+        }
+        return Krs(
+            isCurrent = input.kartuRencanaStudi.isCurrent == 1,
+            isLocked = input.kartuRencanaStudi.isLocked == 1,
+            isApproved = input.kartuRencanaStudi.isApproved == 1,
+            listKrs = listKrs
+        )
     }
 }

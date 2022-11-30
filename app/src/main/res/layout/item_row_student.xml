@@ -1,53 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.Material3.CardView.Elevated"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Material3.CardView.Filled"
+    android:id="@+id/student_card"
+    android:backgroundTint="@color/primary_50"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    android:elevation="2dp"
-    >
+    android:elevation="0dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:orientation="vertical">
+        >
 
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
-<!--            android:id="@+id/rv_row_photo"-->
-<!--            android:layout_width="60dp"-->
-<!--            android:layout_height="60dp"-->
-<!--            tools:src="@tools:sample/avatars"-->
-<!--            android:contentDescription="photo" />-->
+        <TextView
+            android:id="@+id/rv_row_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:maxLines="1"
+            tools:text="@tools:sample/full_names"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:orientation="vertical">-->
+        <TextView
+            android:id="@+id/rv_row_nim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_700"
+            tools:text="@tools:sample/us_zipcodes"
+            app:layout_constraintTop_toBottomOf="@id/rv_row_name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
 
-            <TextView
-                android:id="@+id/rv_row_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                tools:text="@tools:sample/full_names"/>
+        <TextView
+            android:id="@+id/rv_row_ipk_sks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="14sp"
+            android:textColor="@color/grey_700"
+            tools:text="@tools:sample/us_zipcodes"
+            app:layout_constraintTop_toBottomOf="@id/rv_row_nim"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
 
-            <TextView
-                android:id="@+id/rv_row_nim"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="@tools:sample/us_zipcodes"/>
+        <TextView
+            android:id="@+id/rv_row_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/grey_700"
+            tools:text="@tools:sample/date/mmddyy"
+            app:layout_constraintTop_toTopOf="@id/rv_row_ipk_sks"
+            app:layout_constraintBottom_toBottomOf="@id/rv_row_ipk_sks"
+            app:layout_constraintRight_toRightOf="parent"
+            />
 
-            <TextView
-                android:id="@+id/rv_row_sks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="@tools:sample/us_zipcodes"/>
-<!--        </LinearLayout>-->
-    </LinearLayout>
+        <TextView
+            android:id="@+id/rv_row_krs_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
+            android:text="KRS belum disetujui"
+            android:textSize="11sp"
+            android:background="@drawable/bg_rounded"
+            android:textColor="@color/danger_700"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_row_ipk_sks"
+            />
+
+        <TextView
+            android:id="@+id/rv_row_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
+            android:text="Terancam DO"
+            android:textSize="11sp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_rounded"
+            android:textColor="@color/danger_700"
+            app:layout_constraintLeft_toRightOf="@id/rv_row_krs_status"
+            app:layout_constraintTop_toBottomOf="@id/rv_row_ipk_sks"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

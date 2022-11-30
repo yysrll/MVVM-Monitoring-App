@@ -2,8 +2,8 @@ package com.yusril.mvvmmonitoring.core.domain.model
 
 data class StudyResult(
     val name: String,
-    val score_number: String,
-    val score_letter: String,
+    val scoreNumber: String = "",
+    val scoreLetter: String = "",
     val sks: Int,
-    val score_total: String
+    val scoreTotal: String = "",
 )

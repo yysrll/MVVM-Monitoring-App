@@ -30,9 +30,8 @@
         <item name="fontFamily">@font/poppins</item>
     </style>
 
-    <style name="CustomChipStyle" parent="Widget.Material3.Chip.Filter">
-<!--        <item name="chipBackgroundColor">@color/chip_background_color</item>-->
-<!--        <item name="checkedIconTint">@color/success_200</item>-->
-<!--        <item name="android:textColor">@color/success_700</item>-->
+    <style name="ExpandedBarTextStyle" parent="Theme.MVVMMonitoring">
+        <item name="android:textSize">0.1sp</item>
+        <item name="android:textColor">@android:color/transparent</item>
     </style>
 </resources>

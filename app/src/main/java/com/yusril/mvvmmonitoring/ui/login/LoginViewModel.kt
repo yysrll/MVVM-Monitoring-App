@@ -1,6 +1,5 @@
 package com.yusril.mvvmmonitoring.ui.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yusril.mvvmmonitoring.core.domain.repository.MainRepository
@@ -23,22 +22,14 @@ class LoginViewModel @Inject constructor(
     var token: String = ""
 
     fun login(nidn: String, password: String) {
-        getToken()
         _loginState.value = Resource.loading()
         val job = viewModelScope.launch {
             repository.login(nidn, password)
         }
         viewModelScope.launch(Dispatchers.IO) {
             job.join()
-            _loginState.value = repository.getProfile(token).value
-        }
-    }
-
-    private fun getToken() {
-        viewModelScope.launch {
-            repository.getToken().collect {
-                token = it
-            }
+            token = repository.getToken()
+            _loginState.value = repository.getProfile(token)
         }
     }
 }

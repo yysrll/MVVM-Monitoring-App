@@ -35,6 +35,7 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
+            android:theme="@style/Theme.MVVMMonitoring.NoActionBar"
             android:exported="true" >
         </activity>
     </application>

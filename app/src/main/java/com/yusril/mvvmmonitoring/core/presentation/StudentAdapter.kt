@@ -3,10 +3,13 @@ package com.yusril.mvvmmonitoring.core.presentation
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.yusril.mvvmmonitoring.R
 import com.yusril.mvvmmonitoring.core.domain.model.Student
 import com.yusril.mvvmmonitoring.databinding.ItemRowStudentBinding
+import java.util.Calendar
 
 class StudentAdapter : RecyclerView.Adapter<StudentAdapter.RecyclerViewHolder>() {
     private val listStudent = ArrayList<Student>()
@@ -25,10 +28,33 @@ class StudentAdapter : RecyclerView.Adapter<StudentAdapter.RecyclerViewHolder>()
 
     class RecyclerViewHolder(private val binding: ItemRowStudentBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(student: Student) {
+            val isStatusVisible = student.krsIsLocked == false || student.krsIsApproved == false
+            binding.rvRowKrsStatus.isVisible = isStatusVisible
+
+            binding.rvRowKrsStatus.apply {
+                if (student.krsIsLocked == false) {
+                    text = "KRS belum dikunci"
+                } else if(student.krsIsApproved == false) {
+                    text = "KRS belum disetujui"
+                }
+            }
+
+            val cal = Calendar.getInstance()
+            val year = cal.get(Calendar.YEAR)
+
+            val diffYear = year - student.year!!.toInt()
+            binding.rvRowStatus.apply {
+                if (diffYear == 2 && student.sks < 48) text = "Evaluasi 4 Semester"
+                else if (diffYear == 7) text = "Evaluasi 14 Semester"
+                else isGone = true
+            }
+
+
             with(binding) {
-                rvRowName.text = student.nim
-                rvRowNim.text = student.gpa
-                rvRowSks.text = this@RecyclerViewHolder.itemView.context.getString(R.string.total_sks, student.sks)
+                rvRowName.text = student.name
+                rvRowNim.text = student.nim
+                rvRowYear.text = student.year
+                rvRowIpkSks.text = this@RecyclerViewHolder.itemView.context.getString(R.string.total_ipk_sks, student.gpa, student.sks)
             }
         }
     }

@@ -24,7 +24,6 @@ import com.yusril.mvvmmonitoring.ui.detail.DetailActivity
 import com.yusril.mvvmmonitoring.ui.login.LoginActivity
 import com.yusril.mvvmmonitoring.ui.utils.MyAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -44,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         studentListBinding = StudentListBinding.bind(binding.root)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             title = ""
             elevation = 0f
@@ -57,36 +57,38 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        token = intent.getStringExtra(TOKEN_EXTRA).toString()
-
-        lifecycleScope.launch {
-            launch {
-                showStudent()
-            }
-            viewModel.getLecturer().first {
-                if (it.nidn == "") {
-                    MyAlertDialog().setErrorAlertDialog(
-                        this@MainActivity,
-                        resources.getString(R.string.error_dialog_title),
-                        resources.getString(R.string.error_dialog_get_lecturer),
-                        resources.getString(R.string.login_again),
-                    ) {
-                        viewModel.deleteLecturerLogin()
-                        LoginActivity.start(this@MainActivity)
-                        finish()
-                    }.show()
-                } else {
-                    lecturer = it
-                    binding.tvLecturerName.text = lecturer.name
-                    viewModel.getStudent(token, lecturer.nidn)
-                }
-                true
-            }
-        }
-
         initRecyclerView()
 
+        token = intent.getStringExtra(TOKEN_EXTRA).toString()
+        lecturer = viewModel.getLecturer()
+        if (lecturer.nidn == "") {
+            MyAlertDialog().setErrorAlertDialog(
+                this@MainActivity,
+                resources.getString(R.string.error_dialog_title),
+                resources.getString(R.string.error_dialog_get_lecturer),
+                resources.getString(R.string.login_again),
+            ) {
+                viewModel.deleteLecturerLogin()
+                LoginActivity.start(this@MainActivity)
+                finish()
+            }.show()
+        } else {
+            binding.collapseToolbar.title = lecturer.name
+            binding.includeHeader.tvLecturerName.text = lecturer.name
+            binding.includeHeader.tvLecturerNidn.text = lecturer.nidn
+            viewModel.getStudent(token, lecturer.nidn)
+        }
+
+        lifecycleScope.launch {
+            showStudent()
+        }
+
         Log.d("MainActivity Time: ", "execution time ${System.currentTimeMillis() - startTime} ms")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        viewModel.getStudent(token, lecturer.nidn)
     }
 
     private suspend fun showStudent(){
@@ -111,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                     MyAlertDialog().setErrorAlertDialog(
                         this,
                         resources.getString(R.string.error_dialog_title),
-                        resources.getString(R.string.error_dialog_description),
+                        it.message.toString(),
                         resources.getString(R.string.try_again)
                     ) {
                         viewModel.getStudent(token, lecturer.nidn)
@@ -169,7 +171,6 @@ class MainActivity : AppCompatActivity() {
 
 
     companion object {
-        val TAG = MainActivity::class.simpleName
         private const val TOKEN_EXTRA = "TOKEN"
         fun start(activity: Activity, token: String) {
             val intent = Intent(activity, MainActivity::class.java)
